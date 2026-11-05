@@ -1,0 +1,121 @@
+/* Native owner source: DeepStack-Shop-Browse-Layout-17Oct [Recovered].ai, 19 Oct. */
+:root{--tier-u:min(.0520833333vw,.0925925926svh)}
+body[data-owner-tier=true]{width:100%;margin:0;background:#0b0b0d}
+body[data-owner-tier=true] header{width:calc(1920 * var(--tier-u));height:calc(306 * var(--tier-u));padding:0;min-height:0;margin-inline:auto;position:relative}
+body[data-owner-tier=true] .brand-home{position:absolute;left:calc(699.2406 * var(--tier-u));top:calc(97.48649 * var(--tier-u));width:calc(670.15033 * var(--tier-u));height:calc(109.68185 * var(--tier-u));max-width:none;background:url('assets/owner-second-tier19/masthead.png') center/contain no-repeat}
+body[data-owner-tier=true] .brand-home>*{visibility:hidden}
+body[data-owner-tier=true] header .edition,body[data-owner-tier=true] .inventory{display:none!important}
+body[data-owner-tier=true] .overview-utilities{left:calc(1630 * var(--tier-u));right:auto;top:calc(125 * var(--tier-u));width:calc(203 * var(--tier-u));height:calc(64 * var(--tier-u))}
+body[data-owner-tier=true] .overview-utilities .library-account{width:100%;font-size:max(14px,calc(20 * var(--tier-u)))}
+body[data-owner-tier=true] .overview-utilities .utility-login{width:100%}
+body[data-owner-tier=true] .layout{position:relative;width:calc(1920 * var(--tier-u));margin-inline:auto;display:block}
+body[data-owner-tier=true] .layout main{position:relative;width:100%;padding:0;margin:0;min-height:calc(774 * var(--tier-u));max-width:none}
+body[data-owner-tier=true] .layout aside,body[data-owner-tier=true] .library-toolbar,body[data-owner-tier=true] .index-row,body[data-owner-tier=true] #eyebrow,body[data-owner-tier=true] #intro,body[data-owner-tier=true] footer,body[data-owner-tier=true] #detail{display:none!important}
+body[data-owner-tier=true] .intro{position:absolute;left:0;top:calc(-306 * var(--tier-u));width:100%;height:calc(306 * var(--tier-u));padding:0;margin:0;pointer-events:none;z-index:1}
+body[data-owner-tier=true] .intro::after{content:'';position:absolute;left:0;top:calc(304.841 * var(--tier-u));width:calc(1889.07253 * var(--tier-u));border-top:.5px solid #c4c9d2}
+body[data-owner-tier=true] #title{position:absolute;left:calc(116.4307 * var(--tier-u));top:calc(244.84131 * var(--tier-u));width:calc(1320 * var(--tier-u));height:calc(80 * var(--tier-u));padding:0;margin:0;line-height:1;max-width:none}
+body[data-owner-tier=true] #title svg{display:block;width:100%;height:100%;overflow:visible}
+.owner-title-text{font:300 60px Inter,Arial,sans-serif;letter-spacing:1.5px;fill:#f1f2f4;font-synthesis:none}
+body[data-owner-tier=true] .asset-workspace{padding:0;container-type:normal;position:relative}
+body[data-owner-tier=true] .library-status{position:absolute;top:calc(680 * var(--tier-u));left:calc(695 * var(--tier-u));max-width:calc(1050 * var(--tier-u));font-size:max(14px,calc(18 * var(--tier-u)));z-index:4;margin:0}
+.owner-machine{position:relative;width:100%;height:calc(774 * var(--tier-u))}
+.owner-choices{position:absolute;left:calc(134.417057 * var(--tier-u));top:calc(121.480968 * var(--tier-u));width:calc(364.403729 * var(--tier-u));max-height:calc(500.156 * var(--tier-u));overflow:auto;display:flex;flex-direction:column;gap:calc(50.777098 * var(--tier-u));scrollbar-width:thin}
+.owner-folder-choice{position:relative;display:block;flex:0 0 auto;width:100%;height:calc(86.956133 * var(--tier-u));border:0;background:none;padding:0;color:#f9f9fa;cursor:pointer;text-align:left;isolation:isolate}
+.owner-folder-choice>svg{display:block;width:100%;height:100%;overflow:visible}
+.owner-folder-label{font:300 24px Inter,Arial,sans-serif;letter-spacing:.6px;fill:#f9f9fa;font-synthesis:none}
+.owner-folder-choice:hover,.owner-folder-choice:focus-visible{filter:brightness(1.16)}
+.owner-folder-choice:focus-visible{outline:1px solid #d8d4e1;outline-offset:8px}
+.owner-running-glare{opacity:0;pointer-events:none;stroke-linecap:round;animation:owner-rim-run 4.8s linear infinite;animation-play-state:paused}
+.owner-folder-choice:is(:hover,:focus-visible) .owner-running-glare{opacity:.95;animation-play-state:running}
+@keyframes owner-rim-run{from{stroke-dashoffset:0}to{stroke-dashoffset:-100}}
+.owner-pane{position:absolute;left:calc(658.834277 * var(--tier-u));top:calc(82.104265 * var(--tier-u));width:calc(1178.529266 * var(--tier-u));height:calc(573.42586 * var(--tier-u));isolation:isolate}
+.owner-pane-art{position:absolute;inset:0;width:100%;height:100%;z-index:-1;overflow:visible;pointer-events:none}
+.owner-vending-scroll{position:absolute;left:calc(36.34975 * var(--tier-u));right:calc(39.27265 * var(--tier-u));top:calc(37.400235 * var(--tier-u));height:calc(499.60188 * var(--tier-u));overflow:auto;scrollbar-width:thin;scrollbar-color:#75628d transparent;overscroll-behavior:contain;outline-offset:6px}
+.owner-vending-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));column-gap:calc(42.75577 * var(--tier-u));row-gap:calc(27.51894 * var(--tier-u));align-items:start;padding-bottom:1px}
+.owner-thumbnail{position:relative;display:grid;place-items:center;width:100%;aspect-ratio:1;border:0;padding:0;background:transparent;min-width:0;cursor:pointer}
+.owner-thumbnail>svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.owner-thumbnail img{position:relative;display:block;width:calc(100% - 24 * var(--tier-u));height:calc(100% - 24 * var(--tier-u));object-fit:contain;z-index:1}
+.owner-slot-empty{cursor:default}
+.owner-thumbnail:not(.owner-slot-empty):is(:hover,:focus-visible){filter:brightness(1.22);outline:1px solid #e3deea;outline-offset:4px;border-radius:calc(10.51447 * var(--tier-u))}
+.owner-file-extension{position:relative;font:300 max(14px,calc(24 * var(--tier-u))) Inter,Arial,sans-serif;color:#f1f2f4}
+.owner-reference-mark{position:absolute;right:8px;bottom:6px;font:400 16px Inter,Arial,sans-serif;color:#c4c9d2}
+.owner-total{position:absolute;left:calc(1500.0039 * var(--tier-u));top:calc(-37.1587 * var(--tier-u));font:300 calc(36 * var(--tier-u))/1 Inter,Arial,sans-serif;letter-spacing:.025em;color:#f1f2f4;white-space:nowrap}
+.owner-access-message{position:absolute;left:0;right:0;bottom:calc(-58 * var(--tier-u));margin:0;text-align:center;font:300 max(14px,calc(20 * var(--tier-u)))/1.3 Inter,Arial,sans-serif;color:#c4c9d2}
+@media(prefers-reduced-motion:reduce){.owner-running-glare{animation:none!important}}
+@media(max-width:1000px){
+ :root{--tier-u:1px}
+ body[data-owner-tier=true] header{width:100%;height:270px}
+ body[data-owner-tier=true] .brand-home{left:28px;top:28px;width:min(670px,calc(100% - 56px));height:auto;aspect-ratio:670.15/109.68}
+ body[data-owner-tier=true] .overview-utilities{left:auto;right:28px;top:120px;width:180px;height:56px}
+ body[data-owner-tier=true] .layout{width:100%}
+ body[data-owner-tier=true] .layout main{min-height:0}
+ body[data-owner-tier=true] .intro{top:-270px;height:270px}
+ body[data-owner-tier=true] #title{left:28px;top:199px;width:calc(100% - 56px);height:76px}
+ body[data-owner-tier=true] .intro::after{top:269px;width:calc(100% - 28px)}
+ .owner-machine{height:auto;width:auto;margin:76px 28px 54px;display:flex;flex-direction:column;gap:34px}
+ .owner-choices{position:relative;left:auto;top:auto;width:100%;max-height:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;overflow:visible}
+ .owner-folder-choice{height:auto;aspect-ratio:364.403729/86.956133}
+ .owner-pane{position:relative;left:auto;top:auto;width:100%;height:570px}
+ .owner-pane-art{preserve-aspect-ratio:none}
+ .owner-vending-scroll{left:24px;right:24px;top:24px;height:520px}
+ .owner-vending-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}
+ .owner-total{left:auto;right:0;top:-48px;font-size:24px}
+ .owner-access-message{bottom:-34px}
+ body[data-owner-tier=true] .library-status{position:relative;top:auto;left:auto;max-width:none;margin:0 28px 18px}
+}
+@media(max-width:600px){
+ .owner-choices{grid-template-columns:1fr;gap:22px}
+ .owner-vending-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+ .owner-pane{height:516px}
+ .owner-vending-scroll{height:466px}
+ body[data-owner-tier=true] #title{height:56px;top:210px}
+ .owner-machine{margin-inline:22px}
+}
+.owner-thumbnail>svg{overflow:visible}
+.owner-pane[data-scrollable=false] .owner-vending-scroll{overflow:hidden}
+.owner-vending-scroll{height:calc(500.35188 * var(--tier-u))}
+@media(max-width:1000px){.owner-vending-scroll{height:520px}}
+@media(max-width:600px){.owner-vending-scroll{height:466px}}
+
+/* Responsive slots remain scrollable even when the desktop fits all eighteen. */
+@media(max-width:1000px){
+ .owner-pane[data-scrollable=false] .owner-vending-scroll{overflow:auto}
+ body[data-owner-tier=true] #title{overflow:hidden}
+ body[data-owner-tier=true] #title svg{width:792px;height:48px}
+}
+
+/* Keep the native thumbnail strokes inside the scrolling clip boundary. */
+@media(min-width:1001px){
+ .owner-vending-scroll{left:calc(35.59975 * var(--tier-u));right:calc(38.52265 * var(--tier-u));top:calc(36.650235 * var(--tier-u));height:calc(501.85188 * var(--tier-u));padding:calc(.75 * var(--tier-u));box-sizing:border-box}
+}
+
+/* Owner-directed personal channel: no visible account/login entry. */
+body[data-personal-library=elton] .library-account{display:none!important}
+body[data-personal-library=elton][data-owner-tier=true] .brand-home{background-image:url('assets/owner-second-tier19/elton-masthead.png')}
+
+/* AD-01: only Brand Identity has the owner's deliberate rule-contact exception. */
+body[data-owner-tier=true] #title.owner-title-clear{transform:translateY(calc(-24 * var(--tier-u)))}
+
+/* 02 Nov owner copy correction: genuine Inter ExtraBold, existing heading placement. */
+@font-face{font-family:Inter;src:url(Inter-ExtraBold.ttf);font-style:normal;font-weight:800;font-display:block}
+
+/* Owner 02 Nov: -25 tracking, true Bold, and immediate decelerating category motion. */
+@font-face{font-family:Inter;src:url(Inter-Bold.ttf);font-style:normal;font-weight:700;font-display:block}
+@media(prefers-reduced-motion:no-preference){
+ body[data-view=overview] .layout #grid .badge-drawer{transition:transform 840ms cubic-bezier(.16,1,.3,1),filter 280ms ease-out,opacity 280ms ease-out}
+}
+
+/* Owner request 02 Nov: five table folders, Jeju / Chips and Cards. */
+.table-menu .owner-choices{gap:calc(23 * var(--tier-u));max-height:none;overflow:visible}
+.table-menu .table-jeju-menu{position:absolute;z-index:4;left:calc(405 * var(--tier-u));top:calc(650 * var(--tier-u));width:calc(230 * var(--tier-u));display:flex;flex-direction:column;gap:calc(12 * var(--tier-u))}
+.table-menu .table-jeju-menu[hidden]{display:none}
+.table-menu .table-jeju-menu .owner-folder-choice{height:auto;aspect-ratio:364.403729/86.956133}
+.table-menu .table-jeju-menu .owner-folder-label{font-size:30px}
+.table-menu .owner-choices.jeju-open>.owner-folder-choice:not([data-folder="jeju"]){opacity:.28;filter:blur(1px);transform:scale(.9);transform-origin:left center}
+.table-menu .owner-folder-choice{transition:opacity .2s ease,filter .2s ease,transform .2s ease}
+@media(max-width:1000px){
+ .table-menu .table-jeju-menu{position:relative;left:auto;top:auto;width:70%;align-self:flex-end;order:1;gap:12px}
+ .table-menu .owner-choices{order:0;gap:24px}
+ .table-menu .owner-pane{order:2}
+ .table-menu .owner-total{order:3}
+}

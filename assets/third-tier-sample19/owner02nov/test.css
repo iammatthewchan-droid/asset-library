@@ -1,0 +1,91 @@
+@font-face{font-family:Inter;src:url('/asset-library/Inter-Light.ttf');font-weight:300;font-display:swap}@font-face{font-family:Inter;src:url('/asset-library/Inter-Regular.ttf');font-weight:400;font-display:swap}
+*{box-sizing:border-box}html,body{margin:0;background:#09090b;color:#f1f2f4;font-family:Inter,Arial,sans-serif}body{min-height:100svh;display:grid;place-items:center;overflow-x:auto}#layout-stage{position:relative;width:max(1200px,min(100vw,177.7777778svh));aspect-ratio:16/9;margin:auto;isolation:isolate}#source-art{display:block;width:100%;height:100%;pointer-events:none}button{font:inherit;color:inherit;touch-action:manipulation}button:focus-visible{outline:calc(1.5 * var(--u)) solid #e4d8ef;outline-offset:calc(4 * var(--u))}[hidden]{display:none!important}.sr-only{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.asset-scroll{position:absolute;left:calc(654.341858 * var(--u));top:calc(435.227554 * var(--u));width:calc(677.027344 * var(--u));height:calc(494 * var(--u));overflow:auto;scrollbar-width:thin;scrollbar-color:#8b8f95 transparent;overscroll-behavior:contain;padding:0 0 calc(140 * var(--u));scroll-behavior:smooth}.asset-section{margin:0;padding:0 0 calc(96.568 * var(--u))}.family-title{height:calc(26.542969 * var(--u));margin:0 0 calc(18.833725 * var(--u)) calc(8.5849 * var(--u));font-size:calc(36 * var(--u));font-weight:300;line-height:1}.family-title svg{display:block;width:calc(43.983902 * var(--u));height:100%;overflow:visible}.asset-section[data-family="3D"] .family-title{height:calc(26.894531 * var(--u));margin-left:calc(8.075134 * var(--u))}.asset-section[data-family="3D"] .family-title svg{width:calc(44.774918 * var(--u))}.tiles{display:grid;grid-template-columns:repeat(4,calc(148.253906 * var(--u)));column-gap:calc(28.003906 * var(--u));row-gap:calc(28 * var(--u))}.asset-tile{display:block;position:relative;padding:0;border:0;background:none;width:calc(148.253906 * var(--u));height:calc(148.253906 * var(--u));cursor:pointer}.asset-tile>svg:first-child{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.tile-image{position:absolute;left:8.426%;top:8.426%;width:83.147%;height:83.147%;object-fit:contain;pointer-events:none}.check-art{position:absolute;right:calc(8.742188 * var(--u));top:calc(8.742188 * var(--u));width:calc(22.394532 * var(--u));height:calc(22.394532 * var(--u));pointer-events:none}.check-tick{display:none}.checked .check-box-path{fill:#5a3b78!important;stroke:#e4d8ef!important}.checked .check-tick{display:block}
+.asset-count{position:absolute;left:calc(1145 * var(--u));top:calc(439 * var(--u));width:calc(190 * var(--u));height:calc(33 * var(--u));text-align:center;font-size:calc(25 * var(--u));font-weight:300;line-height:1.35;white-space:nowrap;pointer-events:none}.asset-preview{position:absolute;left:calc(1450.73938 * var(--u));top:calc(453.47549 * var(--u));width:calc(337.875 * var(--u));height:calc(337.875 * var(--u));pointer-events:none}.preview-image{width:100%;height:100%;display:block;object-fit:contain;background:#000}.preview-filename{position:absolute;left:calc(1455.266 * var(--u));top:calc(821.5 * var(--u));width:calc(337.875 * var(--u));margin:0;text-align:center;font-size:calc(20 * var(--u));font-weight:400;line-height:1.35;overflow-wrap:anywhere;color:#f1f2f4}.download-action{position:absolute;left:calc(1145.10791 * var(--u));top:calc(835.121979 * var(--u));width:calc(190.220215 * var(--u));height:calc(38.073029 * var(--u));border:0;background:none;padding:0;display:grid;place-items:center;cursor:pointer;z-index:3}.download-action>svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}.download-action>span{position:relative;font-size:calc(16.5 * var(--u));font-weight:400;line-height:1.25;transform:translateX(calc(1.89 * var(--u)));white-space:nowrap}.download-action:disabled{opacity:.4;cursor:default}.nav-hit,.sub-hit,.reset-hit{position:absolute;border:0;padding:0;background:none;cursor:pointer;z-index:4}.reset-hit{z-index:3}.family-menu{position:absolute;left:calc(501 * var(--u));top:calc(488 * var(--u));width:calc(112 * var(--u));padding-left:calc(6 * var(--u));display:grid;gap:calc(8 * var(--u));z-index:6}.family-button{position:relative;isolation:isolate;height:calc(40 * var(--u));background:none;border:0;font-size:calc(21 * var(--u));padding:0;cursor:pointer}.family-button svg{position:absolute;inset:0;width:100%;height:100%;z-index:-1}.empty-message{font-size:calc(24 * var(--u));line-height:1.4;margin:calc(45 * var(--u)) calc(8.5 * var(--u));font-weight:300;max-width:90%}.load-error{position:absolute;left:10%;top:35%;width:80%;font-size:24px;background:#09090b;padding:30px}
+.native-glare{opacity:0;pointer-events:none;transition:opacity 180ms ease}.native-beam{offset-anchor:0px 0px;offset-position:0px 0px;offset-rotate:auto;animation:native-rim 7.2s linear infinite;animation-delay:var(--phase);animation-play-state:paused}.active-glare{opacity:.9}.active-glare .native-beam{animation-play-state:running}@keyframes native-rim{from{offset-distance:var(--rim-from,0%)}to{offset-distance:var(--rim-to,100%)}}@media(prefers-reduced-motion:reduce){.native-beam{animation:none}.native-beam:first-child{offset-distance:16%}.native-beam:last-child{offset-distance:66%}.asset-scroll{scroll-behavior:auto}}
+
+/* Dialog controls use the same canvas unit as the library, including fitted previews. */
+#library-download-confirm{--dialog-u:max(1px,var(--u));box-sizing:border-box;width:min(calc(600 * var(--dialog-u)),calc(100vw - 40 * var(--dialog-u)));max-height:calc(100svh - 40 * var(--dialog-u));padding:calc(36 * var(--dialog-u));border:1px solid #b6afc5;border-radius:calc(20 * var(--dialog-u));background:#080709;color:#f5f3f7;font:400 calc(24 * var(--dialog-u))/1.45 Inter,Arial,sans-serif;overflow:auto}
+#library-download-confirm::backdrop{background:rgba(0,0,0,.72)}
+#library-download-confirm h2{font:400 calc(32 * var(--dialog-u))/1.3 Inter,Arial,sans-serif;margin:0 0 calc(22 * var(--dialog-u));text-align:center;text-wrap:balance}
+#library-download-confirm p{margin:0 0 calc(30 * var(--dialog-u));text-align:center;overflow-wrap:anywhere;text-wrap:pretty}
+.download-confirm-actions{display:flex;gap:calc(10 * var(--dialog-u));justify-content:center}
+.confirm-plaque{position:relative;isolation:isolate;width:calc(220 * var(--dialog-u));height:calc(68 * var(--dialog-u));flex:1;border:0;background:none;color:#fff;font:400 calc(24 * var(--dialog-u))/1.3 Inter,Arial,sans-serif;cursor:pointer;padding:0 calc(32 * var(--dialog-u))}
+.confirm-plaque:focus-visible{outline:2px solid #d5c6e5;outline-offset:3px;border-radius:6px}
+.confirm-plaque:disabled{opacity:.5;cursor:wait}
+#library-download-confirm .download-error{color:#ffc6cb}
+
+.confirm-plaque .plaque-art{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;overflow:visible}.confirm-plaque span{position:relative}
+
+/* Hit areas follow the native slanted silhouette, so upper-level labels stay reachable. */
+.nav-hit,.sub-hit{clip-path:polygon(28% 0,100% 0,72% 100%,0 100%)}
+.download-action:disabled{opacity:1}.download-action:disabled>svg{opacity:.55}.download-action:disabled>span{color:#c8c6ce}
+
+/* Panel reflections share the smaller portrait size and native purple/silver palette at half brightness. */
+
+
+/* Each category owns its download action in normal scroll flow, below its tile grid. */
+.asset-section{padding-bottom:calc(28.494971 * var(--u))}
+.section-download{position:relative;left:auto;top:auto;margin:calc(30 * var(--u)) 0 0 auto;z-index:auto}
+
+/* The total belongs to the first scrolling header and must not cover later rows. */
+.asset-scroll>.asset-count{left:calc(490.658142 * var(--u));top:calc(3.772446 * var(--u))}
+
+/* Owner29Oct: +20% uniform action size; right alignment and30-unit grid gap retained. */
+.section-download{width:calc(228.264258 * var(--u));height:calc(45.687635 * var(--u))}
+.section-download>span{font-size:calc(19.8 * var(--u));transform:translateX(calc(2.268 * var(--u)))}
+.ambient-smoke-layer{position:absolute;inset:0;z-index:-1;overflow:hidden;pointer-events:none;background:#000}
+.ambient-smoke-layer>canvas{display:block;position:absolute;inset:0;width:100%;height:100%}
+.ambient-ready #Starfield-Background{visibility:hidden}
+
+/* Keep the inherited square and rim artwork; allow the soft needle halo outside it. */
+.asset-tile>svg:first-child{overflow:visible}.asset-tile{user-select:none}.tile-image{user-select:none}
+
+/* Owner full-bleed correction: scroll clips at the native rounded panel,
+   while padding preserves the original first-row and grid positions. */
+.asset-scroll{left:calc(613.945862 * var(--u));top:calc(382.491943 * var(--u));width:calc(749.964783 * var(--u));height:calc(572.859375 * var(--u));padding:calc(52.735611 * var(--u)) calc(32.541443 * var(--u)) calc(165.388235 * var(--u)) calc(40.395996 * var(--u));border-radius:calc(29.77 * var(--u));outline:none}
+.asset-scroll>.asset-count{left:calc(531.054138 * var(--u));top:calc(56.508057 * var(--u))}
+#layout-stage:has(.asset-scroll:focus-visible) #source-art [data-source-index="34"]>path{stroke:#e4d8ef;stroke-width:1.5}
+
+/* November 2: exact source artwork; invisible controls follow native bounds. */
+#legacy-templates{position:absolute;inset:0;visibility:hidden;pointer-events:none}
+.ambient-ready #source-art > [id="_x30_1-Galaxy-background"]{visibility:hidden}
+#library-home-link:focus-visible{outline:2px solid #d4cadf;outline-offset:6px;border-radius:4px}
+.menu-hit{position:absolute;background:none;border:0;padding:0;cursor:pointer;clip-path:polygon(24% 0,100% 0,76% 100%,0 100%)}
+.menu-node{transition:opacity 180ms ease,filter 180ms ease;pointer-events:none}
+.menu-node.menu-receded{filter:blur(.45px)}
+/* Disabled fill and label remain quiet; the silver edge never fades. */
+.download-action:disabled>svg{opacity:1}
+.download-action:disabled>svg>path{fill-opacity:.55;stroke-opacity:1}
+/* Keep source lines outside the native artboard from leaking into the top margin. */
+#source-art{overflow:hidden}
+#menu-art-overlay{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none;z-index:9}
+@media(prefers-reduced-motion:reduce){.menu-node{transition:none}}
+
+/* Owner04Nov: paired section controls, same native art, size and hover reflection. */
+.section-actions{display:flex;justify-content:flex-end;align-items:center;gap:calc(12 * var(--u));margin-top:calc(30 * var(--u))}
+.section-actions .section-download{margin:0;flex:none}
+.official-download-links{display:grid;gap:calc(12 * var(--dialog-u));margin-bottom:calc(24 * var(--dialog-u))}
+.official-download-link{display:grid;place-items:center;width:100%;box-sizing:border-box;text-decoration:none}
+
+/* Owner 05 Nov: contain shared action rows inside thumbnail grid. */
+#layout-stage .section-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(28 * var(--u));margin-top:calc(28 * var(--u));width:100%}
+#layout-stage .section-actions .section-download{width:100%;height:auto;aspect-ratio:190.220215 / 38.073029;margin:0;min-width:0}
+
+/* Owner: zero-selection download is grey, not dark purple. */
+#layout-stage .section-actions .section-download:disabled{opacity:1;filter:grayscale(1);cursor:default}
+
+#layout-stage .section-actions .section-download:disabled svg>path{fill:#18171b !important}
+
+#layout-stage .section-actions .section-download:disabled .native-glare{display:none!important}
+#layout-stage .section-actions .section-download:disabled>span{color:#99969f}
+
+/* Owner 05 Nov: proportional 70% confirmation, native rim, no rectangular focus box. */
+#library-download-confirm{transform:scale(.7);transform-origin:center;overflow:visible}
+#library-download-confirm>.dialog-rim{position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none}
+#library-download-confirm .confirm-plaque:focus{outline:none;box-shadow:none}
+#library-download-confirm .confirm-plaque:focus-visible .plaque-art>path{stroke:#e4d8ef;stroke-width:2}
+#library-download-confirm .confirm-plaque:not(:hover) .native-glare,
+#library-download-confirm .confirm-plaque:disabled .native-glare{opacity:0!important}
+#library-download-confirm .confirm-plaque:not(:hover) .native-beam,
+#library-download-confirm .confirm-plaque:disabled .native-beam{animation-play-state:paused!important}

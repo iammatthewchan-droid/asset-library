@@ -1,0 +1,1 @@
+document.write("<link rel=\"stylesheet\" href=\"/asset-library/assets/third-tier-sample19/owner02nov/test.css?v=02nov-logo-home\"><script defer src=\"/asset-library/assets/third-tier-sample19/owner02nov/test.js?v=02nov-logo-home\"></script>");

@@ -1,0 +1,1 @@
+const universalDrawer=new URLSearchParams(location.search).get('drawer');if(universalDrawer&&universalDrawer!=='all'){location.replace('/asset-library/asset-library-live19.html'+location.search);}

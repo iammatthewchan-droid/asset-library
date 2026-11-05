@@ -1,0 +1,15 @@
+/* Owner reference 26 Oct: balanced thumbnail insets, native six-by-three layout. */
+.owner-pane{--thumbnail-unit:var(--tier-u)}
+.preview{--thumbnail-unit:var(--u)}
+@media(min-width:1001px){
+ .owner-pane>.owner-vending-scroll,.preview>.vending-scroll{
+  inset:calc(35.25 * var(--thumbnail-unit));height:auto;
+  padding:calc(.75 * var(--thumbnail-unit));box-sizing:border-box;
+ }
+ .owner-pane .owner-vending-grid,.preview .vending-grid{
+  grid-template-columns:repeat(6,minmax(0,1fr));
+  column-gap:calc(42.75577 * var(--thumbnail-unit));
+  row-gap:calc(27.525395 * var(--thumbnail-unit));
+  padding:0;
+ }
+}

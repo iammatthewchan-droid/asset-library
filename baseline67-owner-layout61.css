@@ -1,0 +1,91 @@
+@font-face{font-family:Inter;src:url('/asset-library/Inter-Bold.ttf');font-weight:700;font-display:swap}
+/* Owner native file c3108888: scene geometry and embedded glyphs, no new shapes. */
+@font-face{font-family:OwnerDisplay61;src:url(assets/owner-layout-61/OwnerDisplay61.ttf?v=7ba948d92f5c);font-weight:400;font-display:block}
+@font-face{font-family:OwnerSupport61;src:url(assets/owner-layout-61/OwnerSupport61.ttf?pdfs=02nov&v=ca04b11f51a0);font-weight:400;font-display:block}
+@font-face{font-family:OwnerHeader61;src:url(assets/owner-layout-61/OwnerHeader61.ttf?v=78a5371030dc);font-weight:400;font-display:block}
+@font-face{font-family:OwnerEdition61;src:url(assets/owner-layout-61/OwnerEdition61.ttf?v=db0f5d8aac9c);font-weight:400;font-display:block}
+:root{--owner-u:1px;--owner-stage-width:100%}
+body{width:100%;margin:0;background:#0b0b0d}
+header{position:relative;display:block;width:var(--owner-stage-width);height:calc(249.99 * var(--owner-u));min-height:0;padding:0;margin-inline:auto;border:0}
+.brand-home{position:absolute;left:calc(135.337 * var(--owner-u));top:calc(92.47 * var(--owner-u));width:calc(855.5 * var(--owner-u));height:calc(140.8 * var(--owner-u));max-width:none;transform:none;margin:0;display:block}
+.owner-header-art,.owner-heading-art,.owner-index-art{display:block;width:100%;height:auto;font-synthesis:none}
+header .edition{position:absolute;left:calc(1566.28 * var(--owner-u));top:calc(77.94 * var(--owner-u));font:400 calc(18.667 * var(--owner-u))/1.35 OwnerEdition61,Inter,sans-serif;letter-spacing:calc(1.85 * var(--owner-u));white-space:nowrap;color:#a5aab4}
+.layout{width:var(--owner-stage-width);margin-inline:auto}
+body[data-view=overview] .layout main{padding:0;min-height:calc(830.01 * var(--owner-u))}
+body[data-view=overview] .intro{position:relative;top:0;display:block;height:calc(220 * var(--owner-u));min-height:0!important;margin:0;padding:0}
+body[data-view=overview] #title{position:absolute;left:calc(156.6396 * var(--owner-u));top:calc(70.01 * var(--owner-u));width:calc(680 * var(--owner-u));height:calc(82 * var(--owner-u));line-height:1;margin:0;transform:none}
+body[data-view=overview] .index-row{display:block;position:absolute;left:calc(156.6396 * var(--owner-u));top:calc(150.01 * var(--owner-u));width:calc(310 * var(--owner-u));height:calc(60 * var(--owner-u));min-height:0;margin:0}
+body[data-view=overview] .index-trigger{display:block;width:100%;padding:0;border:0;line-height:1;letter-spacing:normal}
+body[data-view=overview] .index-trigger::after{display:none}
+body[data-view=overview] #overview{padding:0;position:static}
+body[data-view=overview] .layout .grid.enamel-grid{position:absolute;inset:0;width:100%;height:calc(830.01 * var(--owner-u));min-height:0;display:block;margin:0!important;pointer-events:none}
+body[data-view=overview] .layout #grid .badge-drawer{position:absolute;left:calc(var(--owner-card-x) * var(--owner-u));top:calc(var(--owner-card-y) * var(--owner-u));width:calc(var(--owner-card-width) * var(--owner-u));max-width:none;pointer-events:auto}
+.badge-meta{display:none}
+body[data-view] .overview-utilities{position:absolute;left:calc(1319.14 * var(--owner-u));top:calc(144.5354 * var(--owner-u));right:auto;display:block;width:calc(482.013 * var(--owner-u));height:calc(64.316 * var(--owner-u));margin:0}
+body[data-view] .overview-utilities .library-account{display:flex;align-items:center;gap:12px;position:absolute;left:0;top:0;width:calc(202.891 * var(--owner-u));margin:0}
+body[data-view] .overview-utilities .utility-login{display:block;flex:none;border:0;background:transparent;color:#c4c9d2;width:100%;height:auto;padding:0}
+body[data-view] .overview-utilities .inventory{display:block;flex:none;position:absolute;left:calc(194.55 * var(--owner-u));top:0;width:calc(287.463 * var(--owner-u));margin:0;padding:0;min-width:0}
+body[data-view] .overview-utilities .library-account:has(.signed-name){font-size:max(14px,calc(14.454 * var(--owner-u)));flex-wrap:wrap;gap:5px;line-height:1.2}
+body[data-view] .overview-utilities .library-account:has(.signed-name) button{font-size:14px;padding:3px 5px}
+/* The plain owner title and index remain independently usable hit areas. */
+body[data-view=overview] .intro,body[data-view=overview] .index-row{z-index:2;pointer-events:none}
+body[data-view=overview] .index-trigger{pointer-events:auto}
+body[data-view=overview] .layout.index-open{grid-template-columns:var(--index-width) minmax(0,1fr)}
+body[data-owner-mode=fluid] header{width:100%;height:auto;min-height:170px;padding:28px}
+body[data-owner-mode=fluid] .brand-home{position:relative;left:auto;top:auto;width:min(855.5px,calc(100% - 550px));height:auto;margin:0}
+body[data-owner-mode=fluid] header .edition{left:auto;right:28px;top:24px;font-size:14px;line-height:20px;letter-spacing:1.4px}
+body[data-owner-mode=fluid][data-view] .overview-utilities{left:auto;right:28px;top:74px;width:482.013px;height:64.316px}
+body[data-owner-mode=fluid][data-view] .overview-utilities .library-account{width:202.891px}
+body[data-owner-mode=fluid][data-view] .overview-utilities .inventory{left:194.55px;width:287.463px}
+body[data-owner-mode=fluid][data-view=overview] .layout main{padding:0;min-height:0}
+body[data-owner-mode=fluid][data-view=overview] .intro{position:relative;height:auto;min-height:0;padding:30px 28px 0;margin:0}
+body[data-owner-mode=fluid][data-view=overview] #title{position:static;width:min(680px,100%);height:auto;margin:0}
+body[data-owner-mode=fluid][data-view=overview] .index-row{position:static;width:min(310px,calc((100% - 56px) * .45588235));height:auto;margin:0 28px 22px}
+body[data-owner-mode=fluid][data-view=overview] .layout .grid.enamel-grid{position:relative;inset:auto;width:auto;height:auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:none;gap:32px 26px;margin:35px 28px 65px!important;pointer-events:auto}
+body[data-owner-mode=fluid][data-view=overview] .layout #grid .badge-drawer{position:relative;left:auto;top:auto;width:100%;max-width:none;justify-self:center}
+@container badge-content (max-width:1450px){body[data-owner-mode=fluid][data-view=overview] .layout .grid.enamel-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@container badge-content (max-width:1100px){body[data-owner-mode=fluid][data-view=overview] .layout .grid.enamel-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}}
+@container badge-content (max-width:720px){body[data-owner-mode=fluid][data-view=overview] .layout .grid.enamel-grid{grid-template-columns:1fr}}
+@media(max-width:1150px){
+ body[data-owner-mode=fluid] header{min-height:0;padding:28px 28px 18px}
+ body[data-owner-mode=fluid] .brand-home{width:min(855.5px,100%)}
+ body[data-owner-mode=fluid] header .edition{position:static;display:block;margin:14px 0 0;text-align:right}
+ body[data-owner-mode=fluid][data-view] .overview-utilities{position:relative;left:auto;right:auto;top:auto;width:min(482.013px,100%);height:auto;min-height:64.316px;margin:20px 0 0 auto;display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap}
+ body[data-owner-mode=fluid][data-view] .overview-utilities .library-account{position:relative;left:auto;top:auto;width:202.891px}
+ body[data-owner-mode=fluid][data-view] .overview-utilities .inventory{position:relative;left:auto;top:auto;width:287.463px}
+ body[data-owner-mode=fluid][data-view=overview] .intro{padding-top:24px}
+}
+@media(max-width:700px){
+ body[data-owner-mode=fluid] header{padding:24px 20px 10px}
+ body[data-owner-mode=fluid][data-view] .overview-utilities{justify-content:flex-end;gap:10px;margin-top:18px}
+ body[data-owner-mode=fluid][data-view=overview] .intro{padding-inline:20px}
+ body[data-owner-mode=fluid][data-view=overview] .index-row{margin-inline:20px;width:calc((100% - 40px) * .45588235)}
+ body[data-owner-mode=fluid][data-view=overview] .layout .grid.enamel-grid{margin-inline:20px!important;gap:32px}
+ body[data-view=overview] .layout.index-open{grid-template-columns:var(--index-width) 100%}
+ body[data-view=overview] .layout.index-open>main{width:100%;padding:0}
+ body[data-owner-mode=fluid][data-view=overview] .layout.index-open .grid.enamel-grid{grid-template-columns:1fr}
+}
+
+/* Inactive badges contract around the group centre; outer hover badges stay inside the page. */
+.layout #grid .badge-drawer:is(.badge-first-column,.badge-last-column):not(.is-pointed):not(:focus-visible){transform-origin:center}
+
+/*16Oct: the title widens for tracking while its glyph size and baseline stay fixed. */
+body[data-view=overview] #title{width:calc(var(--owner-heading-width,680) * var(--owner-u))}
+body[data-owner-mode=fluid][data-view=overview] #title{width:min(calc(var(--owner-heading-width,680) * 1px),100%)}
+
+/* Owner04Nov: retain slots, reduce complete drawer graphics by ten percent. */
+body[data-view=overview] .layout #grid .badge-drawer{scale:.9;transform-origin:left center}
+.layout #nav a,.layout #nav a span{font-size:calc(28 * var(--reading-unit) + 6pt)}
+.layout #nav a[data-category=all]{font-size:calc(34 * var(--reading-unit) + 10pt);font-weight:700}
+.layout #nav a{position:relative}
+.layout #nav a:not(:last-child)::after{content:'';position:absolute;left:0;right:0;bottom:var(--needle-bottom,0px);height:var(--menu-hairline,1px);background:linear-gradient(90deg,transparent,#bbb9cc 18%,#f3f3f5 50%,#bbb9cc 82%,transparent);opacity:.65;pointer-events:none}
+body[data-view=overview] .layout #grid .badge-drawer{transform-origin:left center!important}
+
+/* Owner: open index gap equals half the normal drawer orb diameter. */
+body[data-view=overview] .layout>main{transition:transform 840ms cubic-bezier(.16,1,.3,1)}
+body[data-view=overview] .layout.index-open>main{transform:translateX(var(--index-gap-shift,0px))}
+@media(prefers-reduced-motion:reduce){body[data-view=overview] .layout>main{transition:none}}
+
+/* Current location is semantic only; purple highlight follows the pointer. */
+.layout #nav a[aria-current=page]{background:transparent;border-left-color:transparent;color:#b8bdc6}
+.layout #nav a:hover{background:linear-gradient(173deg,#3C2850 0%,#39264C 23.58%,#312141 45.455%,#23172E 66.659%,#0F0A14 87.321%,#000 100%);color:#f1f2f4;border-left-color:transparent}

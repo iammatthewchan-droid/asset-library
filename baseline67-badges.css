@@ -1,0 +1,68 @@
+/* One proportionally scaled SVG contains each circle, wing, title and quantity. */
+.layout #grid .badge-drawer{display:flex;flex-direction:column;justify-content:flex-start;justify-self:center;width:100%;max-width:var(--badge-max-width,none);min-height:0;padding:0;border:0;background:transparent;box-shadow:none;overflow:visible;text-decoration:none;position:relative;z-index:1;transform-origin:center;filter:none;opacity:1;transition:transform 280ms ease,filter 280ms ease,opacity 280ms ease}
+.layout #grid .badge-drawer:is(.is-pointed,:focus-visible){background:transparent;border:0;transform:scale(1.4);z-index:6}
+/* A pointer takes priority; keyboard focus receives the same treatment on its own. */
+.layout #grid:has(.badge-drawer.is-pointed) .badge-drawer:not(.is-pointed),
+.layout #grid:not(:has(.badge-drawer.is-pointed)):has(.badge-drawer:focus-visible) .badge-drawer:not(:focus-visible){transform:translate(var(--badge-recede-x,0px),var(--badge-recede-y,0px)) scale(.8);transform-origin:center;filter:blur(3px);opacity:.5;z-index:1}
+.layout #grid:has(.badge-drawer.is-pointed) .badge-drawer:not(.is-pointed) .badge-glare{opacity:0;animation:none}
+.layout #grid .badge-drawer.badge-first-column{transform-origin:left center}
+.layout #grid .badge-drawer.badge-last-column{transform-origin:right center}
+.badge-drawer>.drawer-top,.badge-drawer>p,.badge-drawer>.handle,.badge-drawer>.drawer-needle{display:none}
+.badge-face{width:100%;flex:none}
+.badge-art{display:block;width:100%;height:auto;overflow:visible}
+.layout #grid .badge-heading-accessible{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+.badge-meta{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:7px 5px 0;color:#c4c9d2;font:400 16px/1.2 Inter,Arial,sans-serif}
+.badge-number{display:flex;align-items:center;gap:8px;font-variant-numeric:tabular-nums}
+.badge-lock{display:inline-flex}.badge-lock svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.badge-drawer .badge-glare{opacity:0}
+.badge-glare-beam{offset-anchor:0px 0px;offset-position:0px 0px;offset-rotate:auto;animation:none}
+.badge-drawer:is(.is-pointed,:focus-visible) .badge-glare{opacity:.9}
+.badge-drawer:is(.is-pointed,:focus-visible) .badge-glare-beam{animation:badge-rim-glare 7.2s linear infinite normal;animation-delay:calc(3 * var(--reflection-phase,0s) + var(--reflection-offset,0s))}
+.layout #grid:has(.badge-drawer.is-pointed) .badge-drawer:not(.is-pointed) .badge-glare-beam{animation:none}
+
+@keyframes badge-rim-glare{from{offset-distance:0%}to{offset-distance:100%}}
+.badge-drawer:focus-visible{outline:2px solid #e5e7f1;outline-offset:5px;border-radius:5px}
+/* Halve the original18px row gap; remove unused stretched grid tracks. */
+body[data-view=overview] .layout .grid.enamel-grid{position:relative;min-height:0;height:auto;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:none;grid-auto-rows:auto;gap:9px 16px;align-items:start;align-content:start;margin-top:var(--badge-hover-clearance,0px);margin-bottom:var(--badge-hover-clearance,0px)}
+.layout>main{container-type:inline-size;container-name:badge-content}
+@container badge-content (max-width:1250px){body[data-view=overview] .layout .grid.enamel-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@container badge-content (max-width:900px){body[data-view=overview] .layout .grid.enamel-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:12px}}
+@container badge-content (max-width:500px){body[data-view=overview] .layout .grid.enamel-grid{grid-template-columns:1fr;row-gap:12px}}
+@media(max-width:850px){.badge-meta{font-size:15px}}
+@media(prefers-reduced-motion:reduce){.layout #grid .badge-drawer{transition:none}.badge-drawer:is(.is-pointed,:focus-visible) .badge-glare-beam{animation:none}}
+
+/* Owner5:32 title: exact source wing, source-size type and more space below masthead. */
+header{--masthead-margin:clamp(30px,2.65vw,90px);--masthead-scale:1.32;padding:var(--masthead-margin) calc(var(--masthead-margin) + 30px) calc(var(--masthead-margin) + var(--masthead-extra,60px))}
+.brand-home{transform:translateY(30px) scale(var(--masthead-scale));transform-origin:left top;max-width:calc(100% / var(--masthead-scale))}
+body[data-view=overview]{width:100%;margin:0}
+.layout main{--library-content-padding:calc(clamp(20px,1.88vw,72px) + 30px);padding-inline:var(--library-content-padding)}
+body[data-view=overview] .layout main{padding-top:var(--masthead-clearance,86px)}
+body[data-view=overview] .intro{position:relative;display:block;min-height:var(--intro-height,auto)}
+body[data-view=overview] .intro>div:first-child{flex:1;min-width:0}
+body[data-view=overview] #title{position:relative;width:min(calc(100% + var(--library-content-padding)),clamp(520px,36vw,1040px));margin:0 0 12px calc(-1 * var(--library-content-padding));line-height:1}
+.title-index-trigger{position:absolute;left:0;top:56%;width:56.5%;height:44%;padding:0;font-size:0;line-height:0;color:transparent;background:transparent;border:0!important;clip-path:polygon(0 0,100% 0,78% 100%,0 100%)}
+.title-index-trigger::after{display:none}
+.title-index-trigger:focus-visible{outline:2px solid #e5e7f1;outline-offset:-4px}
+body[data-view=overview] .index-row{display:none}
+body[data-view=overview] .overview-account{margin:0 0 12px}
+.layout>aside{background:rgba(11,11,13,.7)}
+.layout #nav a[data-category="all"]{font-size:var(--index-label-size,max(17px,calc(34 * var(--reading-unit))))}
+.overview-utilities{display:none}
+body[data-view=overview] .overview-utilities{position:absolute;display:flex;align-items:flex-start;gap:18px;right:var(--utility-right,0px);top:var(--utility-top,0px)}
+body[data-view=overview] .overview-utilities .library-account{display:flex;align-items:center;gap:12px}
+body[data-view=overview] .overview-utilities .utility-login{display:block;flex:none;width:calc(240px * var(--utility-scale,1));padding:0;border:0;background:transparent;color:#c4c9d2}
+body[data-view=overview] .overview-utilities .inventory{display:block;flex:none;width:calc(470px * var(--utility-scale,1));padding:0;margin:0}
+.utility-art{display:block;width:100%;height:auto}
+.utility-login:focus-visible{outline:2px solid #e5e7f1;outline-offset:4px;border-radius:12px}
+body[data-view=overview] .intro.utility-stacked .overview-utilities{position:relative;top:auto;right:auto;justify-content:flex-end;margin:12px 0 20px}
+body[data-view=overview] .intro.utility-stacked{min-height:0!important}
+body[data-view=overview] .library-toolbar.overview-account{display:none}
+.layout .inventory #asset-total{display:inline;width:auto;min-width:0}
+.title-wing-art{display:block;width:100%;height:auto;overflow:visible}
+.page-heading-accessible{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+@media(max-width:1399px){body[data-view=overview] .overview-utilities{position:relative;top:auto;right:auto;justify-content:flex-end;margin:12px 0 20px}body[data-view=overview] .intro{min-height:0!important}}
+@media(max-width:999px){header{--masthead-scale:1.2}}
+@media(max-width:700px){header{padding-bottom:var(--masthead-margin)}.brand-home{margin-bottom:var(--masthead-extra,60px)}}
+@media(max-width:700px){body[data-view=overview] #title{width:calc(100% + var(--library-content-padding));margin-bottom:16px}body[data-view=overview] .overview-utilities{flex-wrap:wrap;gap:12px}body[data-view=overview] .overview-utilities .library-account{justify-content:flex-end;width:100%}}
+/* A narrow push menu translates the full content width, preserving readable type. */
+@media(max-width:700px){.layout.index-open{grid-template-columns:var(--index-width) 100%}.layout.index-open>main{width:100%;padding-inline:var(--library-content-padding)}}
