@@ -26,3 +26,15 @@ window.DSBorderGlare={fill(group,d,phase='0s',width=668){
  }
 }};
 })();
+
+/* Owner-selected B: deep purple face and 1.5px silver edge. */
+(()=>{let serial=0;const ns='http://www.w3.org/2000/svg';
+window.DSButtonColourB=path=>{
+ if(path.dataset.colourB)return;path.dataset.colourB='true';
+ const svg=path.ownerSVGElement;if(!svg)return;
+ const id='button-b-'+serial++,defs=document.createElementNS(ns,'defs');
+ const gradient=(suffix,stops,vertical)=>{const g=document.createElementNS(ns,'linearGradient');g.id=id+suffix;g.setAttribute('x1','0%');g.setAttribute('y1','0%');g.setAttribute('x2',vertical?'0%':'100%');g.setAttribute('y2',vertical?'100%':'0%');for(const [offset,color] of stops){const s=document.createElementNS(ns,'stop');s.setAttribute('offset',offset);s.setAttribute('stop-color',color);g.append(s)}defs.append(g)};
+ gradient('-fill',[[0,'#271834'],[1,'#000000']],true);
+ gradient('-silver',[[0,'#73717f'],[.25,'#ffffff'],[.55,'#93909e'],[.8,'#ffffff'],[1,'#73717f']],false);
+ svg.prepend(defs);path.style.fill='url(#'+id+'-fill)';path.style.stroke='url(#'+id+'-silver)';path.style.strokeWidth='1.5px';path.setAttribute('vector-effect','non-scaling-stroke');
+};})();

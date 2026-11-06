@@ -10,7 +10,7 @@ function makePlaque(link,id){
  const defs=svgElement('defs');const gradient=svgElement('linearGradient',{id:'silver-'+id,x1:0,y1:0,x2:1,y2:0});
  for(const stop of SILVER_STOPS)gradient.append(svgElement('stop',stop));defs.append(gradient);
  const path=svgElement('path',{fill:'#35204f',stroke:'url(#silver-'+id+')','stroke-width':1.25,'vector-effect':'non-scaling-stroke'});
- svg.append(defs,path);link.prepend(svg);
+ svg.append(defs,path);link.prepend(svg);window.DSButtonColourB(path);
  return ()=>{const w=link.offsetWidth,h=link.offsetHeight,scale=(h-8)/SOURCE_HEIGHT,nw=(w-16)/scale;
  const map=x=>x<SOURCE_WIDTH/2?x:nw-(SOURCE_WIDTH-x);
  const d=SOURCE_SEGMENTS.map(([op,...pts])=>op.toUpperCase()+pts.map(([x,y])=>map(x).toFixed(4)+' '+y).join(' ')).join(' ')+' Z';
@@ -298,7 +298,7 @@ function makePlaque(link,id){
   function action(text,classes){
    const b=H('button','download-action section-download '+classes),label=H('span','',text),art=fresh(clone(downloadArt));
    b.type='button';b.dataset.category=name;b.append(art,label);
-   const route=art.querySelector('path');addGlare(art,route,190);
+   const route=art.querySelector('path');window.DSButtonColourB(route);addGlare(art,route,190);
    const light=on=>setGlare(route,on&&!b.disabled);
    b.onpointerenter=()=>light(true);b.onpointerleave=()=>light(false);
    b.onfocus=()=>light(true);b.onblur=()=>light(false);
@@ -346,7 +346,7 @@ function makePlaque(link,id){
  }
  function setGlare(route,active){glareMap.get(route)?.classList.toggle('active-glare',active)}
  function controlGlare(b){const svg=b.querySelector('svg'),path=svg.querySelector(':scope>path');svg.querySelector('.native-glare')?.remove();const g=addGlare(svg,path,SOURCE_WIDTH);g.setAttribute('transform',path.getAttribute('transform'));b.onpointerenter=()=>{if(!b.disabled)g.classList.add('active-glare')};b.onpointerleave=()=>g.classList.remove('active-glare')}
- menuRecords.forEach(rec=>addGlare(rec.path.parentNode,rec.path,rec.path.getBBox().width,{tinted:true}));
+ menuRecords.forEach(rec=>{window.DSButtonColourB(rec.path);addGlare(rec.path.parentNode,rec.path,rec.path.getBBox().width,{tinted:true})});
  function resize(){const u=stage.getBoundingClientRect().width/1920;document.documentElement.style.setProperty('--u',u+'px');updateMenuAssembly();if(dialog.open){paintCancel();paintYes();controlGlare(cancel);controlGlare(yes)}}new ResizeObserver(resize).observe(stage);resize();showCollection(new URLSearchParams(location.search).get('folder')==='font'?1:0,0);stage.dataset.ready='true';stage.dataset.version='02nov-logo-home';
  // Refresh the catalogue when returning to the test; retain existing checks and current folder.
  window.addEventListener('focus',async()=>{try{const r=await fetch('/asset-library/data/bins.json');if(!r.ok)return;const j=await r.json();const next=[...j.bins.filter(a=>a.download_ready!==false),...brandAssets,...await deepVisionPdfs()];if(JSON.stringify(next.map(a=>a.id+':'+a.revision))!==JSON.stringify(assets.map(a=>a.id+':'+a.revision))){assets=next;showCollection(activeGroup,activeSub)}}catch{}});

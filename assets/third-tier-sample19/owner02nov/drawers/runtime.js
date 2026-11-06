@@ -11,7 +11,7 @@ function makePlaque(link,id){
  const defs=svgElement('defs');const gradient=svgElement('linearGradient',{id:'silver-'+id,x1:0,y1:0,x2:1,y2:0});
  for(const stop of SILVER_STOPS)gradient.append(svgElement('stop',stop));defs.append(gradient);
  const path=svgElement('path',{fill:'#35204f',stroke:'url(#silver-'+id+')','stroke-width':1.25,'vector-effect':'non-scaling-stroke'});
- svg.append(defs,path);link.prepend(svg);
+ svg.append(defs,path);link.prepend(svg);window.DSButtonColourB(path);
  return ()=>{const w=link.offsetWidth,h=link.offsetHeight,scale=(h-8)/SOURCE_HEIGHT,nw=(w-16)/scale;
  const map=x=>x<SOURCE_WIDTH/2?x:nw-(SOURCE_WIDTH-x);
  const d=SOURCE_SEGMENTS.map(([op,...pts])=>op.toUpperCase()+pts.map(([x,y])=>map(x).toFixed(4)+' '+y).join(' ')).join(' ')+' Z';
@@ -297,7 +297,7 @@ function makePlaque(link,id){
    const b=H('button','download-action section-download '+classes),label=H('span','',text),art=fresh(clone(downloadArt));
    b.type='button';b.dataset.category=name;b.append(art,label);
    const route=art.querySelector('path');
-   addGlare(art,route,190);
+   window.DSButtonColourB(route);addGlare(art,route,190);
    const light=on=>setGlare(route,on&&!b.disabled);
    b.onpointerenter=()=>light(true);b.onpointerleave=()=>light(false);
    b.onfocus=()=>light(true);b.onblur=()=>light(false);
@@ -392,7 +392,7 @@ function makePlaque(link,id){
   function menuKey(rec,e){menuKeyboard=true;const peers=rec.level?currentChildren():rootRecords;if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();peers[(peers.indexOf(rec)+(e.key==='ArrowDown'?1:peers.length-1))%peers.length].hit.focus()}else if(e.key==='ArrowRight'&&!rec.level&&brandRecords.some(r=>r.parentRecord===rec)){e.preventDefault();activateMenu(rec,false);currentChildren()[0].hit.focus()}else if(e.key==='Escape'||e.key==='ArrowLeft'){e.preventDefault();if(rec.level)rec.parentRecord.hit.focus();else closeMenu()}}
   reset.onclick=()=>{closeMenu();showCollection(0,0)};
 
-  menuRecords.forEach(rec=>addGlare(rec.path.parentNode,rec.path,rec.path.getBBox().width,{tinted:true}));
+  menuRecords.forEach(rec=>{window.DSButtonColourB(rec.path);addGlare(rec.path.parentNode,rec.path,rec.path.getBBox().width,{tinted:true})});
  function resize(){const u=stage.getBoundingClientRect().width/1920;document.documentElement.style.setProperty('--u',u+'px');updateMenuAssembly();if(dialog.open){paintCancel();paintYes();controlGlare(cancel);controlGlare(yes)}}new ResizeObserver(resize).observe(stage);resize();showCollection(Math.max(0,Math.min(drawer.menu.length-1,new URLSearchParams(location.search).has('builderFolder')?builderFolders.findIndex(n=>(n.directOnly?new Set([n.id]):folderDescendants(n.id)).has(new URLSearchParams(location.search).get('builderFolder'))):(Number(new URLSearchParams(location.search).get('folder'))||1)-1)),0);stage.dataset.ready='true';stage.dataset.version='03nov-universal-drawers';stage.dataset.drawer=drawerID;
  const resumeKey='ds-drawer-refresh-'+drawerID;
  try{const saved=JSON.parse(sessionStorage.getItem(resumeKey)||'null');if(saved){sessionStorage.removeItem(resumeKey);const i=drawer.menu.indexOf(saved.group);if(i>=0){showCollection(i,saved.sub);scroll.scrollTop=saved.scroll;}}}catch{}
