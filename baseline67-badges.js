@@ -138,7 +138,8 @@
     if(match){
      let route=match[2].replace(/a\s*216[\s,]+216\s+0\s+1\s+0/gi,'a 216 216 0 1 1');
      if(!/z\s*$/i.test(route))route+=' Z';
-     beam.style.offsetPath='path("'+route+'")';
+     beam.style.offsetPath='none';
+     window.DSBorderGlare.fill(beam,route,[...beam.parentNode.children].indexOf(beam)%2?'-3.6s':'0s',1000);
     }
     beam.dataset.glareDirection='clockwise';
    }
