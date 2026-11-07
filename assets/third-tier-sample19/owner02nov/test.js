@@ -229,6 +229,7 @@ function makePlaque(link,id){
  for(const rec of menuRecords)menuAssembly.append(rec.art);
  fresh(menuOverlay);stage.append(menuOverlay);
  function updateMenuAssembly(){
+   if(innerWidth<=700){menuScale=1;setMenu();return}
    const stageBox=stage.getBoundingClientRect(),u=stageBox.width/1920;
    const available=scroll.getBoundingClientRect().left-stageBox.left-logoBox.x*u-menuRightPixels-menuPanelGapPixels;
    menuScale=Math.min(menuMaximumScale,available/((extendedRight-logoBox.x)*u));
@@ -449,7 +450,11 @@ function makePlaque(link,id){
  previewSelect.addEventListener('focus',()=>{if(previewSelect.matches(':focus-visible'))setGlare(previewRim,true)});
  previewSelect.addEventListener('blur',()=>{if(!previewSelect.matches(':hover'))setGlare(previewRim,false)});
  syncPreviewSelection();
-function resize(){const u=stage.getBoundingClientRect().width/1920;document.documentElement.style.setProperty('--u',u+'px');updateMenuAssembly();if(dialog.open){paintCancel();paintYes();controlGlare(cancel);controlGlare(yes)}}new ResizeObserver(resize).observe(stage);resize();showCollection(({font:1,color:2,mov:3})[new URLSearchParams(location.search).get('folder')]||0,new URLSearchParams(location.search).get('subfolder')==='title'?'title':0);if(new URLSearchParams(location.search).get('subfolder')==='title'){menuState.root='.mov';menuState.brand='Title';setMenu()}stage.dataset.ready='true';window.DSLibraryReady?.('drawer');stage.dataset.version='02nov-logo-home';
+const mobileHeader=H('header','mobile-library-header');
+ const mobileHome=H('a','','DeepStack · Asset Library');mobileHome.href='/asset-library/next19.html?drawer=all';mobileHeader.append(mobileHome,H('div','',document.querySelector('h1')?.textContent.replace(/^Asset Library — /,'')||'Asset Library'));stage.append(mobileHeader);
+ const mobileNav=H('nav','mobile-library-nav');mobileNav.setAttribute('aria-label','Folders');stage.append(mobileNav);
+ for(const rec of menuRecords){const art=S('svg',{class:'mobile-menu-art',viewBox:`${rec.box.x} ${rec.box.y} ${rec.box.w} ${rec.box.h}`,'aria-hidden':'true'});const copy=rec.art.cloneNode(true);copy.removeAttribute('transform');copy.style.visibility='visible';copy.style.opacity='1';copy.querySelectorAll('.native-glare').forEach(x=>x.remove());art.append(copy);rec.hit.append(art);mobileNav.append(rec.hit);}
+ function resize(){const u=stage.getBoundingClientRect().width/1920;document.documentElement.style.setProperty('--u',u+'px');updateMenuAssembly();if(dialog.open){paintCancel();paintYes();controlGlare(cancel);controlGlare(yes)}}new ResizeObserver(resize).observe(stage);resize();showCollection(({font:1,color:2,mov:3})[new URLSearchParams(location.search).get('folder')]||0,new URLSearchParams(location.search).get('subfolder')==='title'?'title':0);if(new URLSearchParams(location.search).get('subfolder')==='title'){menuState.root='.mov';menuState.brand='Title';setMenu()}stage.dataset.ready='true';window.DSLibraryReady?.('drawer');stage.dataset.version='02nov-logo-home';
  // Refresh the catalogue when returning to the test; retain existing checks and current folder.
  window.addEventListener('focus',async()=>{try{const r=await fetch('/asset-library/data/bins.json');if(!r.ok)return;const j=await r.json();const next=[...j.bins.filter(a=>a.download_ready!==false),...brandAssets,...await deepVisionPdfs()];if(JSON.stringify(next.map(a=>a.id+':'+a.revision))!==JSON.stringify(assets.map(a=>a.id+':'+a.revision))){assets=next;showCollection(activeGroup,activeSub)}}catch{}});
 })().catch(error=>{console.error(error);if(window.DSLibraryLoadFailed){window.DSLibraryLoadFailed();return;}const e=document.createElement('p');e.className='load-error';e.setAttribute('role','alert');e.textContent=error.message||'The library could not load. Refresh to try again.';document.querySelector('#layout-stage').append(e)});
