@@ -46,9 +46,17 @@ function makePlaque(link,id){
      const library=await response.json();
      const logo=library.nodes.find(node=>node.id==='logo'&&node.parent==='brand-identity');
      const brand=logo&&library.nodes.find(node=>node.parent===logo.id&&node.name==='DeepVision');
-     if(!brand)return [];
-     return library.assets.filter(asset=>asset.folder===brand.id&&asset.extension==='.pdf'&&asset.download_url)
-       .map((asset,slot)=>({...asset,brand:brand.name,variant:'3D',revision:library.revision,slot}));
+     const color=library.nodes.find(node=>node.parent==='brand-identity'&&node.name.toLowerCase()==='color');
+   const mov=library.nodes.find(node=>node.parent==='brand-identity'&&node.name==='.mov');
+  const title=mov&&library.nodes.find(node=>node.parent===mov.id&&node.name==='Title');
+   return [
+    ...library.assets.filter(asset=>brand&&asset.folder===brand.id&&asset.extension==='.pdf'&&asset.download_url)
+     .map((asset,slot)=>({...asset,brand:brand.name,variant:'3D',revision:library.revision,slot})),
+    ...library.assets.filter(asset=>color&&asset.folder===color.id&&asset.download_url)
+     .map((asset,slot)=>({...asset,collection:'2-0',variant:'PNG',revision:library.revision,slot})),
+    ...library.assets.filter(asset=>mov&&asset.folder===mov.id&&asset.download_url).map((asset,slot)=>({...asset,collection:'3-0',variant:'.mov',revision:library.revision,slot})),
+    ...library.assets.filter(asset=>title&&asset.folder===title.id&&asset.download_url).map((asset,slot)=>({...asset,collection:'3-title',variant:'Title',revision:library.revision,slot}))
+   ];
    }catch{return []}
  }
  const [ownerRaw,raw,catalog,brandAssets,headingRaw,libraryPdfs]=await Promise.all([fetch('/asset-library/assets/third-tier-sample19/owner02nov/owner-reference.svg').then(r=>{if(!r.ok)throw Error('Updated layout could not load.');return r.text()}),fetch('/asset-library/assets/third-tier-sample19/owner27/owner-reference.svg').then(r=>{if(!r.ok)throw Error('Layout could not load. Refresh to try again.');return r.text()}),fetch('/asset-library/data/bins.json').then(r=>{if(!r.ok)throw Error('Assets could not load. Refresh to try again.');return r.json()}),fetch('/asset-library/assets/third-tier-sample19/owner02nov/brands/brand-assets.json').then(r=>{if(!r.ok)throw Error('Brand assets could not load.');return r.json()}),fetch('/asset-library/assets/third-tier-sample19/owner02nov/brand-identity-extrabold.svg').then(r=>{if(!r.ok)throw Error('Heading could not load.');return r.text()}),deepVisionPdfs()]);
@@ -72,13 +80,46 @@ function makePlaque(link,id){
  const header2=crop(nodes[43],{x:662.9267578125,y:435.2275543,w:43.983902,h:26.542969}),header3=crop(nodes[44],{x:662.4169922,y:901.6816406,w:44.774918,h:26.894531});
  const downloadPath=clone(nodes[38]);downloadPath.id='download-source-path';const downloadBox={x:1145.10791,y:835.121979,w:190.220215,h:38.073029};
  const gradientID=/url\(#([^)]*)\)/.exec(downloadPath.getAttribute('style'))[1],downloadGradient=source.querySelector('[id="'+gradientID+'"]');
- downloadPath.style.strokeWidth='0.79997';const menuRimID=/url\(#([^)]*)\)/.exec(ownerSource.querySelector('[data-native-index="8"]').getAttribute('stroke'))[1];const menuRimGradient=ownerSource.querySelector('[id="'+menuRimID+'"]');downloadGradient.replaceChildren(...[...menuRimGradient.children].map(clone));const downloadArt=crop(downloadPath,downloadBox,[downloadGradient]);
+ const menuSurface = ownerSource.querySelector('[data-native-index="8"]');
+ const menuFill = ownerSource.querySelector(menuSurface.getAttribute('fill').slice(4, -1));
+ const menuRim = ownerSource.querySelector(menuSurface.getAttribute('stroke').slice(4, -1));
+ const menuBox = menuSurface.getBBox();
+ const actionFill = clone(menuFill);
+ actionFill.id = 'section-action-native-fill';
+ // Refit the native fill to the existing action path, preserving its stop colours.
+ const nativeTransform = actionFill.getAttribute('gradientTransform');
+ actionFill.setAttribute('gradientTransform',
+  `translate(${downloadBox.x} ${downloadBox.y}) scale(${downloadBox.w / menuBox.width} ${downloadBox.h / menuBox.height}) translate(${-menuBox.x} ${-menuBox.y}) ${nativeTransform}`);
+ downloadPath.style.removeProperty('fill');
+ downloadPath.style.removeProperty('stroke');
+ downloadPath.setAttribute('fill', 'url(#' + actionFill.id + ')');
+ downloadPath.setAttribute('stroke', 'url(#' + downloadGradient.id + ')');
+ downloadPath.style.strokeWidth = menuSurface.getAttribute('stroke-width');
+ downloadGradient.replaceChildren(...Array.from(menuRim.children, clone));
+ const downloadArt = crop(downloadPath, downloadBox, [actionFill, downloadGradient]);
  // Retain the owner's static artwork verbatim; replace only live content and controls.
  for(const i of [39,40,42,43,44,54,55,57,58,38])nodes[i].remove();
  const sr=H('h1','sr-only','Asset Library — Brand Identity');stage.append(sr);
  const scroll=H('div','asset-scroll');scroll.id='asset-scroll';scroll.tabIndex=0;scroll.setAttribute('aria-label','Scroll asset thumbnails');stage.append(scroll);
  const count=H('div','asset-count');count.setAttribute('aria-live','polite');stage.append(count);
  const preview=H('section','asset-preview');preview.setAttribute('aria-label','Enlarged asset preview');const image=H('img','preview-image');image.alt='';image.draggable=false;preview.append(image);stage.append(preview);
+ const movie=H('video','preview-movie');movie.muted=true;movie.defaultMuted=true;movie.loop=true;movie.playsInline=true;movie.preload='metadata';movie.hidden=true;movie.setAttribute('aria-label','Movie preview');movie.style.cssText='width:100%;height:100%;object-fit:contain;background:#000;pointer-events:none';preview.append(movie);
+ function paintPreviewMedia(asset,live){
+  const isMovie=/\.(mp4|mov|m4v|webm)$/i.test(asset.extension||asset.filename||'')&&!!asset.download_url;
+  if(!isMovie){movie.pause();movie.hidden=true;image.hidden=false;return}
+  if(movie.dataset.assetId!==asset.id){movie.pause();movie.dataset.assetId=asset.id;movie.src=asset.download_url;movie.poster=asset.thumbnail_url;}
+  movie.hidden=false;image.hidden=true;
+  if(live)movie.play().catch(()=>{movie.hidden=true;image.hidden=false;});
+ }
+ movie.addEventListener('error',()=>{movie.hidden=true;image.hidden=false});
+ stage.addEventListener('pointermove',event=>{
+  if(movie.hidden)return;
+  const inPreview=event.target.closest?.('.preview-select-hit,.asset-preview,.preview-filename');
+  const tile=event.target.closest?.('.asset-tile');
+  if(inPreview||(tile&&tile.dataset.assetId===movie.dataset.assetId))movie.play().catch(()=>{});else movie.pause();
+ });
+ stage.addEventListener('pointerleave',()=>movie.pause());
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)movie.pause()});
  const filename=H('p','preview-filename');filename.id='preview-filename';stage.append(filename);
  // Preserve the exact native silver frames above full-bleed scrolling content.
  const panelRims=S('svg',{id:'panel-rims-overlay',viewBox:ownerSource.getAttribute('viewBox')||'0 0 1920 1080','aria-hidden':'true'});
@@ -93,7 +134,7 @@ function makePlaque(link,id){
  const selected=new Map();try{for(const id of JSON.parse(sessionStorage.getItem('ds-owner27-selected')||'[]')){const a=assets.find(x=>x.id===id);if(a)selected.set(id,a)}}catch{}
  const family=a=>/^DS-AL-(2D|3D)-/.exec(a.filename)?.[1]||a.variant||'Other';
  // Native November 2 artwork supplies every visible menu shape and label.
- const groups=[['Logo','Main Logo','Symbols','Wordmarks','Lockups','Mono'],['Font'],['Color']];
+ const groups=[['Logo','Main Logo','Symbols','Wordmarks','Lockups','Mono'],['Font'],['Color'],['.mov']];
  let currentBrand='Deepstack';
  // Enter with main controls only; reveal brands through an explicit parent hover/focus.
  const menuState={root:null,brand:null,format:null};
@@ -134,11 +175,25 @@ function makePlaque(link,id){
    return rec;
  }
  const rootRecords=[nativeMenu([nativeNodes[8],nativeNodes[9]],'Logo',0),nativeMenu([nativeNodes[10]],'Font',0),nativeMenu([nativeNodes[11]],'Color',0)];
+ // Reuse Color's native trapezoid and spacing for the new root folder.
+ const movArt=fresh(clone(nativeNodes[11]));
+ const oldLabel=movArt.querySelector('g');
+ const labelBox=nativeNodes[11].querySelector('g').getBBox();
+ oldLabel?.remove();movArt.append(S('text',{x:labelBox.x,y:labelBox.y+labelBox.height,'font-family':'Inter,Arial,sans-serif','font-size':24,'font-weight':400,fill:'#F1F2F4'}));
+ movArt.lastChild.textContent='.mov';
+ const movWrap=S('g',{transform:`translate(0 ${rootRecords[2].box.y-rootRecords[1].box.y})`});movWrap.append(movArt);
+ rootRecords.push(nativeMenu([movWrap],'.mov',0));
  // Overlay belongs to a different drawer; it is not a Brand Identity root.
  nativeNodes[12].remove();
  const sourceBrandRecords=nativeBrandNames.map((label,i)=>nativeMenu([nativeNodes[15+i*4],nativeNodes[16+i*4]],label,1));
  const brandRecords=brandNames.map(label=>sourceBrandRecords.find(r=>r.label===label));
  brandRecords.forEach(rec=>stage.append(rec.hit));
+ const titleArt=fresh(clone(sourceBrandRecords[0].art));
+ const titleSurface=titleArt.querySelector('path');
+ for(const child of [...titleArt.children])if(child!==titleSurface)child.remove();
+ const titleBox=sourceBrandRecords[0].box;
+ const titleLabel=S('text',{x:titleBox.x+titleBox.w*.42,y:titleBox.y+titleBox.h*.64,'font-family':'Inter,Arial,sans-serif','font-size':22,'font-weight':400,fill:'#F1F2F4'});titleLabel.textContent='Title';titleArt.append(titleLabel);
+ const titleRecord=nativeMenu([titleArt],'Title',1);titleRecord.parentRoot='.mov';
  const formatRecords=[nativeMenu([nativeNodes[35],nativeNodes[36]],'2D',2),nativeMenu([nativeNodes[39],nativeNodes[40]],'3D',2)];
  // Invisible travel areas sit above earlier tiers and below their own buttons.
  // They preserve the open branch through the gaps and angled edges.
@@ -194,10 +249,10 @@ function makePlaque(link,id){
    if(!visible)setGlare(rec.path,false);
  }
  function setMenu(){
-   const logoOpen=menuState.root==='Logo',brandOpen=logoOpen&&!!menuState.brand;
-   stage.dataset.submenuOpen=String(logoOpen);
+   const logoOpen=menuState.root==='Logo',movOpen=menuState.root==='.mov',brandOpen=logoOpen&&!!menuState.brand;
+   stage.dataset.submenuOpen=String(logoOpen||movOpen);
    stage.dataset.menuPath=[menuState.root,menuState.brand,menuState.format].filter(Boolean).join(' / ');
-   rootRecords.forEach(r=>{placeMenu(r,r.box,true,!!menuState.root&&menuState.root!==r.label);if(r.label==='Logo')r.hit.setAttribute('aria-expanded',String(logoOpen))});
+   rootRecords.forEach(r=>{placeMenu(r,r.box,true,!!menuState.root&&menuState.root!==r.label);if(r.label==='Logo'||r.label==='.mov')r.hit.setAttribute('aria-expanded',String(r.label==='Logo'?logoOpen:movOpen))});
    brandRecords.forEach((r,i)=>{
      // A tier has one fixed set of slots. Hover never translates or reorders it.
      const target={x:brandRest.x,y:brandRest.y+i*brandStride};
@@ -205,7 +260,11 @@ function makePlaque(link,id){
      r.hit.setAttribute('aria-expanded',String(brandOpen&&r.label===menuState.brand));
    });
    placeCorridor(menuCorridors[0],{x:brandRest.x,y:logoBox.y+logoBox.h-2,w:brandDock.w,h:brandStride*(brandNames.length-1)+brandDock.h+branchGap+2},logoOpen,1);
-   const activeBrandIndex=Math.max(0,brandNames.indexOf(menuState.brand));
+   const titleRest={x:brandRest.x,y:rootRecords[3].box.y+rootRecords[3].box.h+branchGap};
+    placeMenu(titleRecord,titleRest,movOpen,false);
+    titleRecord.hit.setAttribute('aria-pressed',String(activeGroup===3&&activeSub==='title'));
+    if(movOpen)placeCorridor(menuCorridors[0],{x:titleRest.x,y:rootRecords[3].box.y+rootRecords[3].box.h-2,w:brandDock.w,h:brandDock.h+branchGap+2},true,1);
+    const activeBrandIndex=Math.max(0,brandNames.indexOf(menuState.brand));
    formatRecords.forEach(r=>{
      const target={x:r.box.x+brandRest.x-brandDock.x,y:r.box.y+brandRest.y+activeBrandIndex*brandStride-brandDock.y};
      // Terminal 2D/3D choices remain opaque together; only hover glare transfers.
@@ -219,7 +278,7 @@ function makePlaque(link,id){
    clearTimeout(menuTimer);
    if(pointer){if(hoveredMenu&&hoveredMenu!==rec)setGlare(hoveredMenu.path,false);hoveredMenu=rec;setGlare(rec.path,true)}
    if(rec.level===0){menuState.root=rec.label;menuState.brand=null;menuState.format=null}
-   else if(rec.level===1){menuState.root='Logo';menuState.brand=rec.label;menuState.format=null}
+   else if(rec.level===1){menuState.root=rec.parentRoot||'Logo';menuState.brand=rec.label;menuState.format=null}
    else menuState.format=rec.label;
    setMenu();
    syncMenuContent(rec);
@@ -230,9 +289,10 @@ function makePlaque(link,id){
 
  function resetOutsideMenu(e){if(e.pointerType==='touch'||e.target.closest?.('.menu-hit,.menu-corridor'))return;if(!menuState.root)return;hoveredMenu=null;menuKeyboard=false;delete stage.dataset.menuTravel;menuRecords.forEach(r=>setGlare(r.path,false));if(e.type==='pointerdown')closeMenu();else deferCloseMenu()}
  document.addEventListener('pointermove',resetOutsideMenu);document.addEventListener('pointerdown',resetOutsideMenu);
- function chooseBrand(label){currentBrand=label;showCollection(0,0)}
+ function chooseBrand(label){currentBrand=label;showCollection(label==='.mov'?3:0,0)}
  // Hover/focus changes the content immediately; crossing a protected gap does not.
  function syncMenuContent(rec){
+    if(rec===titleRecord){if(activeGroup!==3||activeSub!=='title')showCollection(3,'title');return}
    if(rec.level===0){
      const group=rootRecords.indexOf(rec);
      if(activeGroup!==group||activeSub!==0)showCollection(group,0);
@@ -245,7 +305,7 @@ function makePlaque(link,id){
    const normalize=a=>a.filename.replace(/-(2D|3D)-/,'-FORMAT-').replace('-White-','-');
    const preferred=previewAsset&&list.find(a=>normalize(a)===normalize(previewAsset));
    if(list.length)inspect(preferred||list[0]);
-   else{image.hidden=true;filename.hidden=true;previewAsset=null;preview.setAttribute('aria-label','Enlarged asset preview')}
+   else{movie.pause();movie.hidden=true;image.hidden=true;filename.hidden=true;previewAsset=null;preview.setAttribute('aria-label','Enlarged asset preview');syncPreviewSelection()}
    const section=scroll.querySelector(`[data-family="${rec.label}"]`);
    if(section){
      revealFormatSections();
@@ -263,19 +323,20 @@ function makePlaque(link,id){
    if(i===0)rec.hit.setAttribute('aria-haspopup','true');
    rec.hit.onclick=()=>activateMenu(rec,false);
  });
- brandRecords.forEach(rec=>{rec.hit.setAttribute('aria-haspopup','true');rec.hit.onclick=()=>activateMenu(rec,false)});
+ brandRecords.forEach(rec=>{if(rec.label!=='.mov')rec.hit.setAttribute('aria-haspopup','true');rec.hit.onclick=()=>activateMenu(rec,false)});
  formatRecords.forEach(rec=>{rec.hit.onclick=()=>activateMenu(rec,false)});
+ titleRecord.hit.onclick=()=>activateMenu(titleRecord,false);
  function menuKey(rec,e){
    menuKeyboard=true;
-   const siblings=rec.level===0?rootRecords:rec.level===1?brandRecords:formatRecords;
+   const siblings=rec.level===0?rootRecords:rec.level===1?(rec===titleRecord?[titleRecord]:brandRecords):formatRecords;
    if(e.key==='ArrowDown'||e.key==='ArrowUp'){
      e.preventDefault();siblings[(siblings.indexOf(rec)+(e.key==='ArrowDown'?1:siblings.length-1))%siblings.length].hit.focus();
    }else if(e.key==='ArrowRight'){
-     const children=rec.level===0&&rec.label==='Logo'?brandRecords:rec.level===1?formatRecords:[];
+     const children=rec.level===0&&rec.label==='Logo'?brandRecords:rec.level===0&&rec.label==='.mov'?[titleRecord]:rec.level===1&&rec!==titleRecord?formatRecords:[];
      if(children.length){e.preventDefault();activateMenu(rec,false);children[0].hit.focus()}
    }else if(e.key==='ArrowLeft'||e.key==='Escape'){
      e.preventDefault();if(rec.level===2)brandRecords.find(r=>r.label===menuState.brand)?.hit.focus();
-     else if(rec.level===1)rootRecords[0].hit.focus();else{rec.hit.blur();closeMenu()}
+     else if(rec.level===1)rootRecords[rec===titleRecord?3:0].hit.focus();else{rec.hit.blur();closeMenu()}
    }
  }
  // Focusing thumbnails, download links or the confirmation must retain the navigation branch.
@@ -284,8 +345,8 @@ function makePlaque(link,id){
  reset.style.cssText='left:calc(157 * var(--u));top:calc(934 * var(--u));width:calc(112 * var(--u));height:calc(25 * var(--u))';
  reset.remove();reset.onclick=()=>{currentBrand='Deepstack';closeMenu();showCollection(0,0)};
 
- function paintCount(){for(const {button,label,list,name,selectAll,deselectAll}of downloadActions){const n=list.filter(a=>selected.has(a.id)).length;label.textContent=`Download (${n})`;button.setAttribute('aria-label',`Download ${name} (${n})`);button.disabled=busy||!n;if(selectAll)selectAll.disabled=busy||!list.length||n===list.length;if(deselectAll)deselectAll.disabled=busy||!n;for(const b of [button,selectAll,deselectAll])if(b?.disabled)setGlare(b.querySelector('svg>path'),false);}try{sessionStorage.setItem('ds-owner27-selected',JSON.stringify([...selected.keys()]))}catch{}for(const tile of scroll.querySelectorAll('[role=checkbox]')){const yes=selected.has(tile.dataset.assetId);tile.setAttribute('aria-checked',String(yes));tile.classList.toggle('checked',yes)}stage.dataset.selectedCount=String(selected.size)}
- function inspect(asset,live=false){previewAsset=asset;image.src=asset.thumbnail_url;image.hidden=false;filename.replaceChildren();if(asset.extension==='.pdf'&&asset.download_url){const link=H('a','',asset.name.replaceAll('-',' ')+' (PDF)');link.href=asset.download_url;link.setAttribute('download',asset.filename);link.setAttribute('aria-label','Download '+asset.filename);link.style.color='inherit';link.style.textUnderlineOffset='.2em';filename.append(link)}else if(asset.official_url){const link=H('a','','Download '+asset.filename);link.href=asset.official_url;link.target='_blank';link.rel='noopener noreferrer';link.style.color='inherit';link.style.textUnderlineOffset='.2em';filename.append(link)}else filename.textContent=asset.filename;filename.hidden=false;stage.classList.toggle('previewing',live);preview.setAttribute('aria-label','Enlarged preview of '+asset.filename)}
+ function paintCount(){for(const {button,label,list,name,selectAll,deselectAll}of downloadActions){const n=list.filter(a=>selected.has(a.id)).length;label.textContent=`Download (${n})`;button.setAttribute('aria-label',`Download ${name} (${n})`);button.disabled=busy||!n;if(selectAll)selectAll.disabled=busy||!list.length||n===list.length;if(deselectAll)deselectAll.disabled=busy||!n;for(const b of [button,selectAll,deselectAll])if(b?.disabled)setGlare(b.querySelector('svg>path'),false);}try{sessionStorage.setItem('ds-owner27-selected',JSON.stringify([...selected.keys()]))}catch{}for(const tile of scroll.querySelectorAll('[role=checkbox]')){const yes=selected.has(tile.dataset.assetId);tile.setAttribute('aria-checked',String(yes));tile.classList.toggle('checked',yes)}stage.dataset.selectedCount=String(selected.size);syncPreviewSelection()}
+ function inspect(asset,live=false){previewAsset=asset;image.src=asset.thumbnail_url;image.hidden=false;filename.replaceChildren();if(asset.extension==='.pdf'&&asset.download_url){const link=H('a','',asset.name.replaceAll('-',' ')+' (PDF)');link.href=asset.download_url;link.setAttribute('download',asset.filename);link.setAttribute('aria-label','Download '+asset.filename);link.style.color='inherit';link.style.textUnderlineOffset='.2em';filename.append(link)}else if(asset.official_url){const link=H('a','','Download '+asset.filename);link.href=asset.official_url;link.target='_blank';link.rel='noopener noreferrer';link.style.color='inherit';link.style.textUnderlineOffset='.2em';filename.append(link)}else filename.textContent=asset.filename;filename.hidden=false;stage.classList.toggle('previewing',live);preview.setAttribute('aria-label','Enlarged preview of '+asset.filename);paintPreviewMedia(asset,live);syncPreviewSelection()}
  function tile(asset){const b=H('button','asset-tile');b.type='button';b.setAttribute('role','checkbox');b.setAttribute('aria-label','Select '+asset.filename);b.setAttribute('aria-describedby','preview-filename');b.setAttribute('aria-checked',String(selected.has(asset.id)));b.dataset.assetId=asset.id;const frame=crop(firstTileFrame,tileRect);b.append(frame);const rim=frame.querySelector('path');addGlare(frame,rim,tileRect.width,{tinted:true});const img=H('img','tile-image');img.src=asset.thumbnail_url;img.alt='';img.draggable=false;img.loading='lazy';b.append(img);const c=S('g');const cp=clone(tilePaths[1]);cp.setAttribute('class','check-box-path');c.append(cp);c.append(S('path',{class:'check-tick',d:`M${checkRect.x+7},${checkRect.y+16} l6,6 l13,-15`,fill:'none',stroke:'#fff','stroke-width':4}));const check=crop(c,checkRect);check.classList.add('check-art');b.append(check);b.onpointerenter=()=>{lightTile(rim);inspect(asset,true)};b.onpointerleave=()=>{if(activeTileRim===rim)lightTile(null);stage.classList.remove('previewing')};b.onfocus=()=>{lightTile(rim);inspect(asset,true)};b.onblur=()=>{if(activeTileRim===rim)lightTile(null);stage.classList.remove('previewing')};if(asset.link_only&&!asset.official_url){check.remove();b.setAttribute('role','button');b.removeAttribute('aria-checked');b.setAttribute('aria-label','Preview '+asset.filename)}b.onclick=()=>{inspect(asset,true);if(asset.link_only&&!asset.official_url)return;if(selected.has(asset.id))selected.delete(asset.id);else selected.set(asset.id,asset);paintCount()};return b}
  function section(name,list){
   const s=H('section','asset-section');s.dataset.family=name;
@@ -312,7 +373,7 @@ function makePlaque(link,id){
   actions.append(all.button,uncheck.button,download.button);s.append(actions);
   downloadActions.push({button:download.button,label:download.label,list:downloadable,name,selectAll:all.button,deselectAll:uncheck.button});scroll.append(s);
  }
- function showCollection(group,sub){lightTile(null);activeGroup=group;activeSub=sub;setMenu();currentAssets=assets.filter(a=>{if(group===0&&a.brand)return a.brand===currentBrand;if(group===0&&currentBrand!=='Deepstack')return false;if(group===0&&sub===0)return a.collection.startsWith('0-')&&a.id!=='8a0d0e6e52494babb74fda38511618c4';return a.collection===group+'-'+sub});currentAssets.sort((a,b)=>(a.slot-b.slot)||a.filename.localeCompare(b.filename));scroll.replaceChildren(count);downloadActions.length=0;scroll.scrollTop=0;count.textContent='Total Items : '+currentAssets.length;count.setAttribute('aria-label',count.textContent);if(!currentAssets.length){const message=H('p','empty-message','No '+(group===0?currentBrand:groups[group][0])+' assets yet.');scroll.append(message);image.hidden=true;filename.hidden=true;previewAsset=null;preview.setAttribute('aria-label','Enlarged asset preview')}else{const names=[...new Set(currentAssets.map(family))];for(const name of ['2D','3D',...names.filter(n=>n!=='2D'&&n!=='3D')]){const list=currentAssets.filter(a=>family(a)===name);if(list.length)section(name,list)}const first=currentAssets.find(a=>a.filename==='DS-AL-2D-Signature-Ver-White-Square-600.png')||currentAssets[0];inspect(first)}paintCount();announcement.textContent=currentAssets.length+' assets loaded';stage.dataset.visibleCount=String(currentAssets.length)}
+ function showCollection(group,sub){lightTile(null);activeGroup=group;activeSub=sub;setMenu();currentAssets=assets.filter(a=>{if(group===0&&a.brand)return a.brand===currentBrand;if(group===0&&currentBrand!=='Deepstack')return false;if(group===0&&sub===0)return a.collection.startsWith('0-')&&a.id!=='8a0d0e6e52494babb74fda38511618c4';return a.collection===group+'-'+sub});currentAssets.sort((a,b)=>(a.slot-b.slot)||a.filename.localeCompare(b.filename));scroll.replaceChildren(count);downloadActions.length=0;scroll.scrollTop=0;count.textContent='Total Items : '+currentAssets.length;count.setAttribute('aria-label',count.textContent);if(!currentAssets.length){const message=H('p','empty-message','No '+(group===0?currentBrand:groups[group][0])+' assets yet.');scroll.append(message);movie.pause();movie.hidden=true;image.hidden=true;filename.hidden=true;previewAsset=null;preview.setAttribute('aria-label','Enlarged asset preview');syncPreviewSelection()}else{const names=[...new Set(currentAssets.map(family))];for(const name of ['2D','3D',...names.filter(n=>n!=='2D'&&n!=='3D')]){const list=currentAssets.filter(a=>family(a)===name);if(list.length)section(name,list)}const first=currentAssets.find(a=>a.filename==='DS-AL-2D-Signature-Ver-White-Square-600.png')||currentAssets[0];inspect(first)}paintCount();announcement.textContent=currentAssets.length+' assets loaded';stage.dataset.visibleCount=String(currentAssets.length)}
  const dialog=H('dialog');dialog.id='library-download-confirm';dialog.setAttribute('aria-labelledby','library-download-question');const question=H('h2');question.id='library-download-question';const detail=H('p');detail.id='library-download-detail';const error=H('p','download-error');error.hidden=true;error.setAttribute('role','alert');const actions=H('div','download-confirm-actions');const cancel=H('button','confirm-plaque'),yes=H('button','confirm-plaque');cancel.type=yes.type='button';cancel.append(H('span','','Cancel'));yes.append(H('span','','Yes'));actions.append(cancel,yes);dialog.append(question,detail,error,actions);document.body.append(dialog);
  const dialogRim=S('svg',{'aria-hidden':'true',class:'dialog-rim'});dialog.prepend(dialogRim);
  function paintDialogRim(){
@@ -347,7 +408,48 @@ function makePlaque(link,id){
  function setGlare(route,active){glareMap.get(route)?.classList.toggle('active-glare',active)}
  function controlGlare(b){const svg=b.querySelector('svg'),path=svg.querySelector(':scope>path');svg.querySelector('.native-glare')?.remove();const g=addGlare(svg,path,SOURCE_WIDTH);g.setAttribute('transform',path.getAttribute('transform'));b.onpointerenter=()=>{if(!b.disabled)g.classList.add('active-glare')};b.onpointerleave=()=>g.classList.remove('active-glare')}
  menuRecords.forEach(rec=>{window.DSButtonColourB(rec.path);addGlare(rec.path.parentNode,rec.path,rec.path.getBBox().width,{tinted:true})});
- function resize(){const u=stage.getBoundingClientRect().width/1920;document.documentElement.style.setProperty('--u',u+'px');updateMenuAssembly();if(dialog.open){paintCancel();paintYes();controlGlare(cancel);controlGlare(yes)}}new ResizeObserver(resize).observe(stage);resize();showCollection(new URLSearchParams(location.search).get('folder')==='font'?1:0,0);stage.dataset.ready='true';stage.dataset.version='02nov-logo-home';
+ 
+ // Each native panel owns its hover light; preview selection shares the tile state.
+ const galleryRim=nativeOriginal[42].querySelector('path');
+ const previewRim=nativeOriginal[44].querySelector('path');
+ for(const [route,name] of [[galleryRim,'thumbnails'],[previewRim,'preview']]){
+  const light=addGlare(route.parentNode,route,route.getBBox().width,{tinted:true});
+  light.dataset.panelGlare=name;
+ }
+ const previewSelect=H('button','preview-select-hit');
+ previewSelect.type='button';previewSelect.setAttribute('aria-describedby','preview-filename');
+ const previewBox=nativeOriginal[44].getBBox();
+ previewSelect.style.cssText=`position:absolute;left:calc(${previewBox.x} * var(--u));top:calc(${previewBox.y} * var(--u));width:calc(${previewBox.width} * var(--u));height:calc(${previewBox.height} * var(--u));border-radius:calc(29.77 * var(--u))`;
+ stage.append(previewSelect);
+ function syncPreviewSelection(){
+  const available=!!previewAsset&&!(previewAsset.link_only&&!previewAsset.official_url);
+  previewSelect.disabled=busy||!available;
+  previewSelect.setAttribute('aria-label',previewAsset?'Select '+previewAsset.filename+' from enlarged preview':'Select enlarged preview');
+  previewSelect.setAttribute('aria-pressed',String(!!previewAsset&&selected.has(previewAsset.id)));
+ }
+ stage.addEventListener('library-preview-asset',event=>{const asset=currentAssets.find(a=>a.id===event.detail.id);if(asset){previewAsset=asset;syncPreviewSelection()}});
+ previewSelect.onclick=()=>{
+  if(!previewAsset||busy||previewSelect.disabled)return;
+  if(selected.has(previewAsset.id))selected.delete(previewAsset.id);else selected.set(previewAsset.id,previewAsset);
+  paintCount();
+ };
+ function insidePanel(route,event){
+  const matrix=route.getScreenCTM();
+  return !!matrix&&route.isPointInFill(new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse()));
+ }
+ function updatePanelHover(event){
+  const blocked=!!document.querySelector('dialog[open]');
+  const onControl=event.target.closest?.('button,a,input,video,audio,[role="checkbox"],.pdf-paged-tile');
+  setGlare(galleryRim,!blocked&&!onControl&&insidePanel(galleryRim,event));
+  setGlare(previewRim,!blocked&&insidePanel(previewRim,event));
+ }
+ stage.addEventListener('pointermove',updatePanelHover);
+ stage.addEventListener('pointerdown',updatePanelHover);
+ stage.addEventListener('pointerleave',()=>{setGlare(galleryRim,false);setGlare(previewRim,false)});
+ previewSelect.addEventListener('focus',()=>{if(previewSelect.matches(':focus-visible'))setGlare(previewRim,true)});
+ previewSelect.addEventListener('blur',()=>{if(!previewSelect.matches(':hover'))setGlare(previewRim,false)});
+ syncPreviewSelection();
+function resize(){const u=stage.getBoundingClientRect().width/1920;document.documentElement.style.setProperty('--u',u+'px');updateMenuAssembly();if(dialog.open){paintCancel();paintYes();controlGlare(cancel);controlGlare(yes)}}new ResizeObserver(resize).observe(stage);resize();showCollection(({font:1,color:2,mov:3})[new URLSearchParams(location.search).get('folder')]||0,new URLSearchParams(location.search).get('subfolder')==='title'?'title':0);if(new URLSearchParams(location.search).get('subfolder')==='title'){menuState.root='.mov';menuState.brand='Title';setMenu()}stage.dataset.ready='true';window.DSLibraryReady?.('drawer');stage.dataset.version='02nov-logo-home';
  // Refresh the catalogue when returning to the test; retain existing checks and current folder.
  window.addEventListener('focus',async()=>{try{const r=await fetch('/asset-library/data/bins.json');if(!r.ok)return;const j=await r.json();const next=[...j.bins.filter(a=>a.download_ready!==false),...brandAssets,...await deepVisionPdfs()];if(JSON.stringify(next.map(a=>a.id+':'+a.revision))!==JSON.stringify(assets.map(a=>a.id+':'+a.revision))){assets=next;showCollection(activeGroup,activeSub)}}catch{}});
-})().catch(error=>{const e=document.createElement('p');e.className='load-error';e.setAttribute('role','alert');e.textContent=error.message||'The library could not load. Refresh to try again.';document.querySelector('#layout-stage').append(e)});
+})().catch(error=>{console.error(error);if(window.DSLibraryLoadFailed){window.DSLibraryLoadFailed();return;}const e=document.createElement('p');e.className='load-error';e.setAttribute('role','alert');e.textContent=error.message||'The library could not load. Refresh to try again.';document.querySelector('#layout-stage').append(e)});

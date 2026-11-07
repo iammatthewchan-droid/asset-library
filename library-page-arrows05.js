@@ -16,7 +16,7 @@ const style=document.createElement('style');style.textContent=`
 .library-pdf-pages button:disabled{opacity:.35;cursor:default}.library-pdf-pages button:focus-visible{outline:2px solid white;outline-offset:1px}.library-pdf-pages span{white-space:nowrap}
 `;document.head.append(style);
 async function pdf(a){if(!library){library=await import('/asset-library/assets/pdf-page-controls05/pdf.js');library.GlobalWorkerOptions.workerSrc='/asset-library/assets/pdf-page-controls05/pdf-worker.js';}if(!docs.has(a.id))docs.set(a.id,library.getDocument({url:a.download_url}).promise);return docs.get(a.id);}
-function show(a,st){const panel=document.querySelector('.asset-preview');if(panel)panel.setAttribute('aria-label','Enlarged preview of '+a.filename+', page '+st.page+' of '+a.page_count);const image=document.querySelector('.preview-image'),name=document.querySelector('.preview-filename');if(image){image.src=st.url||a.thumbnail_url;image.hidden=false;}if(name){
+function show(a,st){document.querySelector('#layout-stage')?.dispatchEvent(new CustomEvent('library-preview-asset',{detail:{id:a.id}}));const panel=document.querySelector('.asset-preview');if(panel)panel.setAttribute('aria-label','Enlarged preview of '+a.filename+', page '+st.page+' of '+a.page_count);const image=document.querySelector('.preview-image'),name=document.querySelector('.preview-filename');if(image){image.src=st.url||a.thumbnail_url;image.hidden=false;}if(name){
   const pageLabel=st.page+' / '+a.page_count;
   if(hasLockupPreview(a)&&new URLSearchParams(location.search).get('drawer')==='brand-identity'){
     const link=document.createElement('a');link.href=a.download_url;link.download=a.filename;link.textContent='Logo Studies (PDF)';

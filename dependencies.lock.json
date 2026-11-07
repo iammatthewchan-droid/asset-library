@@ -1,0 +1,6 @@
+{
+  "kind": "vendored-buildless-site",
+  "python": "3.9+ for local serving and verification",
+  "npm_dependencies": [],
+  "note": "No npm install or package lock required. Full vendored file hashes are recorded in the handoff archive."
+}

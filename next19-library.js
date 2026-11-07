@@ -265,6 +265,14 @@
    const [savedLibrary,binLibrary,brandItems]=await Promise.all([api('/asset-library/data/builder.json',{cache:'no-store'}),api('/asset-library/data/bins.json',{cache:'no-store'}),api('/asset-library/assets/third-tier-sample19/owner02nov/brands/brand-assets.json',{cache:'no-store'})]);
    const identity=catalog.categories.find(c=>c.id==='brand-identity');
    if(identity)identity.asset_count=new Set([...binLibrary.bins.filter(a=>a.download_ready!==false&&a.id!=='8a0d0e6e52494babb74fda38511618c4'),...brandItems].filter(a=>a.brand||/^(0-|1-0$|2-0$)/.test(a.collection||'')).map(a=>a.id)).size;
+   // Match the Brand Identity drawer's saved collections, excluding its legacy duplicate logo.
+   const identityLogo=savedLibrary.nodes.find(n=>n.id==='logo'&&n.parent==='brand-identity');
+   const identityDeepVision=identityLogo&&savedLibrary.nodes.find(n=>n.parent===identityLogo.id&&n.name==='DeepVision');
+   const identityColor=savedLibrary.nodes.find(n=>n.parent==='brand-identity'&&n.name.toLowerCase()==='color');
+   const identityMov=savedLibrary.nodes.find(n=>n.parent==='brand-identity'&&n.name==='.mov');
+   const movieFolders=new Set(identityMov?[identityMov.id]:[]);
+   let grew=true;while(grew){grew=false;for(const n of savedLibrary.nodes)if(movieFolders.has(n.parent)&&!movieFolders.has(n.id)){movieFolders.add(n.id);grew=true;}}
+   if(identity)identity.asset_count+=savedLibrary.assets.filter(a=>a.download_url&&((identityDeepVision&&a.folder===identityDeepVision.id&&a.extension==='.pdf')||(identityColor&&a.folder===identityColor.id)||movieFolders.has(a.folder))).length;
    for(const category of catalog.categories){
     if(category.id==='brand-identity')continue;
     const root=savedLibrary.nodes.find(n=>n.id===savedDrawerRoots[category.id]);

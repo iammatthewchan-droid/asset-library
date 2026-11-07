@@ -72,13 +72,11 @@
 #layout-stage .section-actions{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:calc(28 * var(--u));margin-top:calc(28 * var(--u));width:100%}
 #layout-stage .section-actions .section-download{width:100%;height:auto;aspect-ratio:190.220215 / 38.073029;margin:0;min-width:0}
 
-/* Owner: zero-selection download is grey, not dark purple. */
-#layout-stage .section-actions .section-download:disabled{opacity:1;filter:grayscale(1);cursor:default}
-
-#layout-stage .section-actions .section-download:disabled svg>path{fill:#18171b !important}
-
-#layout-stage .section-actions .section-download:disabled .native-glare{display:none!important}
-#layout-stage .section-actions .section-download:disabled>span{color:#99969f}
+/* Disabled actions retain the native surface and rim. Only the label and interaction change. */
+#layout-stage .section-actions .section-download:disabled{opacity:1;cursor:default}
+#layout-stage .section-actions .section-download:disabled>svg>path{fill-opacity:1}
+#layout-stage .section-actions .section-download:disabled .native-glare{display:none}
+#layout-stage .section-actions .section-download:disabled>span{color:#c8c6ce}
 
 /* Owner 05 Nov: proportional 70% confirmation, native rim, no rectangular focus box. */
 #library-download-confirm{transform:scale(.7);transform-origin:center;overflow:visible}
@@ -89,3 +87,11 @@
 #library-download-confirm .confirm-plaque:disabled .native-glare{opacity:0!important}
 #library-download-confirm .confirm-plaque:not(:hover) .native-beam,
 #library-download-confirm .confirm-plaque:disabled .native-beam{animation-play-state:paused!important}
+
+/* Full preview selection surface; native artwork and media controls retain their geometry. */
+.preview-select-hit{z-index:1;border:0;padding:0;background:transparent;cursor:pointer;outline:none}
+.preview-select-hit:disabled{cursor:default;pointer-events:none}
+.preview-select-hit:focus-visible{outline:1px solid #e4d8ef;outline-offset:-3px}
+.asset-preview,.preview-filename{z-index:2}
+.asset-preview{pointer-events:none}
+.asset-preview button,.asset-preview a,.asset-preview video,.asset-preview audio{pointer-events:auto}

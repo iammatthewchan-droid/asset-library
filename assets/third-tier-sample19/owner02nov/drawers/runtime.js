@@ -70,13 +70,46 @@ function makePlaque(link,id){
  const header2=crop(nodes[43],{x:662.9267578125,y:435.2275543,w:43.983902,h:26.542969}),header3=crop(nodes[44],{x:662.4169922,y:901.6816406,w:44.774918,h:26.894531});
  const downloadPath=clone(nodes[38]);downloadPath.id='download-source-path';const downloadBox={x:1145.10791,y:835.121979,w:190.220215,h:38.073029};
  const gradientID=/url\(#([^)]*)\)/.exec(downloadPath.getAttribute('style'))[1],downloadGradient=source.querySelector('[id="'+gradientID+'"]');
- downloadPath.style.strokeWidth='0.79997';const menuRimID=/url\(#([^)]*)\)/.exec(ownerSource.querySelector('[data-native-index="8"]').getAttribute('stroke'))[1];const menuRimGradient=ownerSource.querySelector('[id="'+menuRimID+'"]');downloadGradient.replaceChildren(...[...menuRimGradient.children].map(clone));const downloadArt=crop(downloadPath,downloadBox,[downloadGradient]);
+ const menuSurface = ownerSource.querySelector('[data-native-index="8"]');
+ const menuFill = ownerSource.querySelector(menuSurface.getAttribute('fill').slice(4, -1));
+ const menuRim = ownerSource.querySelector(menuSurface.getAttribute('stroke').slice(4, -1));
+ const menuBox = menuSurface.getBBox();
+ const actionFill = clone(menuFill);
+ actionFill.id = 'section-action-native-fill';
+ // Refit the native fill to the existing action path, preserving its stop colours.
+ const nativeTransform = actionFill.getAttribute('gradientTransform');
+ actionFill.setAttribute('gradientTransform',
+  `translate(${downloadBox.x} ${downloadBox.y}) scale(${downloadBox.w / menuBox.width} ${downloadBox.h / menuBox.height}) translate(${-menuBox.x} ${-menuBox.y}) ${nativeTransform}`);
+ downloadPath.style.removeProperty('fill');
+ downloadPath.style.removeProperty('stroke');
+ downloadPath.setAttribute('fill', 'url(#' + actionFill.id + ')');
+ downloadPath.setAttribute('stroke', 'url(#' + downloadGradient.id + ')');
+ downloadPath.style.strokeWidth = menuSurface.getAttribute('stroke-width');
+ downloadGradient.replaceChildren(...Array.from(menuRim.children, clone));
+ const downloadArt = crop(downloadPath, downloadBox, [actionFill, downloadGradient]);
  // Retain the owner's static artwork verbatim; replace only live content and controls.
  for(const i of [39,40,42,43,44,54,55,57,58,38])nodes[i].remove();
  document.title='ASSET LIBRARY · '+drawer.title;const sr=H('h1','sr-only','Asset Library — '+drawer.title);stage.append(sr);
  const scroll=H('div','asset-scroll');scroll.id='asset-scroll';scroll.tabIndex=0;scroll.setAttribute('aria-label','Scroll asset thumbnails');stage.append(scroll);
  const count=H('div','asset-count');count.setAttribute('aria-live','polite');stage.append(count);
  const preview=H('section','asset-preview');preview.setAttribute('aria-label','Enlarged asset preview');const image=H('img','preview-image');image.alt='';image.draggable=false;preview.append(image);stage.append(preview);
+ const movie=H('video','preview-movie');movie.muted=true;movie.defaultMuted=true;movie.loop=true;movie.playsInline=true;movie.preload='metadata';movie.hidden=true;movie.setAttribute('aria-label','Movie preview');movie.style.cssText='width:100%;height:100%;object-fit:contain;background:#000;pointer-events:none';preview.append(movie);
+ function paintPreviewMedia(asset,live){
+  const isMovie=/\.(mp4|mov|m4v|webm)$/i.test(asset.extension||asset.filename||'')&&!!asset.download_url;
+  if(!isMovie){movie.pause();movie.hidden=true;image.hidden=false;return}
+  if(movie.dataset.assetId!==asset.id){movie.pause();movie.dataset.assetId=asset.id;movie.src=asset.download_url;movie.poster=asset.thumbnail_url;}
+  movie.hidden=false;image.hidden=true;
+  if(live)movie.play().catch(()=>{movie.hidden=true;image.hidden=false;});
+ }
+ movie.addEventListener('error',()=>{movie.hidden=true;image.hidden=false});
+ stage.addEventListener('pointermove',event=>{
+  if(movie.hidden)return;
+  const inPreview=event.target.closest?.('.preview-select-hit,.asset-preview,.preview-filename');
+  const tile=event.target.closest?.('.asset-tile');
+  if(inPreview||(tile&&tile.dataset.assetId===movie.dataset.assetId))movie.play().catch(()=>{});else movie.pause();
+ });
+ stage.addEventListener('pointerleave',()=>movie.pause());
+ document.addEventListener('visibilitychange',()=>{if(document.hidden)movie.pause()});
  const filename=H('p','preview-filename');filename.id='preview-filename';stage.append(filename);
  // Preserve the exact native silver frames above full-bleed scrolling content.
  const panelRims=S('svg',{id:'panel-rims-overlay',viewBox:ownerSource.getAttribute('viewBox')||'0 0 1920 1080','aria-hidden':'true'});
@@ -243,7 +276,7 @@ function makePlaque(link,id){
    const normalize=a=>a.filename.replace(/-(2D|3D)-/,'-FORMAT-').replace('-White-','-');
    const preferred=previewAsset&&list.find(a=>normalize(a)===normalize(previewAsset));
    if(list.length)inspect(preferred||list[0]);
-   else{image.hidden=true;filename.hidden=true;previewAsset=null;preview.setAttribute('aria-label','Enlarged asset preview')}
+   else{movie.pause();movie.hidden=true;image.hidden=true;filename.hidden=true;previewAsset=null;preview.setAttribute('aria-label','Enlarged asset preview');syncPreviewSelection()}
    const section=scroll.querySelector(`[data-family="${rec.label}"]`);
    if(section){
      revealFormatSections();
@@ -282,8 +315,8 @@ function makePlaque(link,id){
  reset.style.cssText='left:calc(157 * var(--u));top:calc(934 * var(--u));width:calc(112 * var(--u));height:calc(25 * var(--u))';
  reset.remove();reset.onclick=()=>{currentBrand='Deepstack';closeMenu();showCollection(0,0)};
 
- function paintCount(){for(const {button,label,list,name,selectAll,deselectAll}of downloadActions){const n=list.filter(a=>selected.has(a.id)).length;label.textContent=`Download (${n})`;button.setAttribute('aria-label',`Download ${name} (${n})`);button.disabled=busy||!n;if(selectAll)selectAll.disabled=busy||!list.length||n===list.length;if(deselectAll)deselectAll.disabled=busy||!n;for(const b of [button,selectAll,deselectAll])if(b?.disabled)setGlare(b.querySelector('svg>path'),false);}try{sessionStorage.setItem('ds-owner27-selected',JSON.stringify([...selected.keys()]))}catch{}for(const tile of scroll.querySelectorAll('[role=checkbox]')){const yes=selected.has(tile.dataset.assetId);tile.setAttribute('aria-checked',String(yes));tile.classList.toggle('checked',yes)}stage.dataset.selectedCount=String(selected.size)}
- function inspect(asset,live=false){previewAsset=asset;image.src=asset.thumbnail_url;image.hidden=false;filename.textContent=asset.filename;filename.hidden=false;stage.classList.toggle('previewing',live);preview.setAttribute('aria-label','Enlarged preview of '+asset.filename)}
+ function paintCount(){for(const {button,label,list,name,selectAll,deselectAll}of downloadActions){const n=list.filter(a=>selected.has(a.id)).length;label.textContent=`Download (${n})`;button.setAttribute('aria-label',`Download ${name} (${n})`);button.disabled=busy||!n;if(selectAll)selectAll.disabled=busy||!list.length||n===list.length;if(deselectAll)deselectAll.disabled=busy||!n;for(const b of [button,selectAll,deselectAll])if(b?.disabled)setGlare(b.querySelector('svg>path'),false);}try{sessionStorage.setItem('ds-owner27-selected',JSON.stringify([...selected.keys()]))}catch{}for(const tile of scroll.querySelectorAll('[role=checkbox]')){const yes=selected.has(tile.dataset.assetId);tile.setAttribute('aria-checked',String(yes));tile.classList.toggle('checked',yes)}stage.dataset.selectedCount=String(selected.size);syncPreviewSelection()}
+ function inspect(asset,live=false){previewAsset=asset;image.src=asset.thumbnail_url;image.hidden=false;filename.textContent=asset.filename;filename.hidden=false;stage.classList.toggle('previewing',live);preview.setAttribute('aria-label','Enlarged preview of '+asset.filename);paintPreviewMedia(asset,live);syncPreviewSelection()}
  function tile(asset){const b=H('button','asset-tile');b.type='button';b.setAttribute('role','checkbox');b.setAttribute('aria-label','Select '+asset.filename);b.setAttribute('aria-describedby','preview-filename');b.setAttribute('aria-checked',String(selected.has(asset.id)));b.dataset.assetId=asset.id;const frame=crop(firstTileFrame,tileRect);b.append(frame);const rim=frame.querySelector('path');addGlare(frame,rim,tileRect.width,{tinted:true});const img=H('img','tile-image');img.src=asset.thumbnail_url;img.alt='';img.draggable=false;img.loading='lazy';b.append(img);const c=S('g');const cp=clone(tilePaths[1]);cp.setAttribute('class','check-box-path');c.append(cp);c.append(S('path',{class:'check-tick',d:`M${checkRect.x+7},${checkRect.y+16} l6,6 l13,-15`,fill:'none',stroke:'#fff','stroke-width':4}));const check=crop(c,checkRect);check.classList.add('check-art');b.append(check);b.onpointerenter=()=>{lightTile(rim);inspect(asset,true)};b.onpointerleave=()=>{if(activeTileRim===rim)lightTile(null);stage.classList.remove('previewing')};b.onfocus=()=>{lightTile(rim);inspect(asset,true)};b.onblur=()=>{if(activeTileRim===rim)lightTile(null);stage.classList.remove('previewing')};b.onclick=()=>{inspect(asset,true);if(selected.has(asset.id))selected.delete(asset.id);else selected.set(asset.id,asset);paintCount()};return b}
  function section(name,list){
   const s=H('section','asset-section');s.dataset.family=name;
@@ -317,7 +350,7 @@ function makePlaque(link,id){
  const parentFolder=builderFolders[group]||builderRoot;const folder=sub?builderCatalog.nodes.find(n=>n.parent===parentFolder?.id&&n.name===sub):parentFolder;const ids=folder?(folder.directOnly?new Set([folder.id]):folderDescendants(folder.id)):new Set();
  currentAssets=builderCatalog.assets.filter(a=>ids.has(a.folder));
  count.textContent='Total Items : '+currentAssets.length;section(name,currentAssets);
- if(currentAssets.length)inspect(currentAssets[0]);else{image.hidden=true;filename.hidden=true;previewAsset=null;}
+ if(currentAssets.length)inspect(currentAssets[0]);else{movie.pause();movie.hidden=true;image.hidden=true;filename.hidden=true;previewAsset=null;}
  stage.dataset.visibleCount=String(currentAssets.length);announcement.textContent=name;paintCount();setMenu();
  }
 
@@ -393,11 +426,52 @@ function makePlaque(link,id){
   reset.onclick=()=>{closeMenu();showCollection(0,0)};
 
   menuRecords.forEach(rec=>{window.DSButtonColourB(rec.path);addGlare(rec.path.parentNode,rec.path,rec.path.getBBox().width,{tinted:true})});
- function resize(){const u=stage.getBoundingClientRect().width/1920;document.documentElement.style.setProperty('--u',u+'px');updateMenuAssembly();if(dialog.open){paintCancel();paintYes();controlGlare(cancel);controlGlare(yes)}}new ResizeObserver(resize).observe(stage);resize();showCollection(Math.max(0,Math.min(drawer.menu.length-1,new URLSearchParams(location.search).has('builderFolder')?builderFolders.findIndex(n=>(n.directOnly?new Set([n.id]):folderDescendants(n.id)).has(new URLSearchParams(location.search).get('builderFolder'))):(Number(new URLSearchParams(location.search).get('folder'))||1)-1)),0);stage.dataset.ready='true';stage.dataset.version='03nov-universal-drawers';stage.dataset.drawer=drawerID;
+ 
+ // Each native panel owns its hover light; preview selection shares the tile state.
+ const galleryRim=nativeOriginal[42].querySelector('path');
+ const previewRim=nativeOriginal[44].querySelector('path');
+ for(const [route,name] of [[galleryRim,'thumbnails'],[previewRim,'preview']]){
+  const light=addGlare(route.parentNode,route,route.getBBox().width,{tinted:true});
+  light.dataset.panelGlare=name;
+ }
+ const previewSelect=H('button','preview-select-hit');
+ previewSelect.type='button';previewSelect.setAttribute('aria-describedby','preview-filename');
+ const previewBox=nativeOriginal[44].getBBox();
+ previewSelect.style.cssText=`position:absolute;left:calc(${previewBox.x} * var(--u));top:calc(${previewBox.y} * var(--u));width:calc(${previewBox.width} * var(--u));height:calc(${previewBox.height} * var(--u));border-radius:calc(29.77 * var(--u))`;
+ stage.append(previewSelect);
+ function syncPreviewSelection(){
+  const available=!!previewAsset&&!(previewAsset.link_only&&!previewAsset.official_url);
+  previewSelect.disabled=busy||!available;
+  previewSelect.setAttribute('aria-label',previewAsset?'Select '+previewAsset.filename+' from enlarged preview':'Select enlarged preview');
+  previewSelect.setAttribute('aria-pressed',String(!!previewAsset&&selected.has(previewAsset.id)));
+ }
+ stage.addEventListener('library-preview-asset',event=>{const asset=currentAssets.find(a=>a.id===event.detail.id);if(asset){previewAsset=asset;syncPreviewSelection()}});
+ previewSelect.onclick=()=>{
+  if(!previewAsset||busy||previewSelect.disabled)return;
+  if(selected.has(previewAsset.id))selected.delete(previewAsset.id);else selected.set(previewAsset.id,previewAsset);
+  paintCount();
+ };
+ function insidePanel(route,event){
+  const matrix=route.getScreenCTM();
+  return !!matrix&&route.isPointInFill(new DOMPoint(event.clientX,event.clientY).matrixTransform(matrix.inverse()));
+ }
+ function updatePanelHover(event){
+  const blocked=!!document.querySelector('dialog[open]');
+  const onControl=event.target.closest?.('button,a,input,video,audio,[role="checkbox"],.pdf-paged-tile');
+  setGlare(galleryRim,!blocked&&!onControl&&insidePanel(galleryRim,event));
+  setGlare(previewRim,!blocked&&insidePanel(previewRim,event));
+ }
+ stage.addEventListener('pointermove',updatePanelHover);
+ stage.addEventListener('pointerdown',updatePanelHover);
+ stage.addEventListener('pointerleave',()=>{setGlare(galleryRim,false);setGlare(previewRim,false)});
+ previewSelect.addEventListener('focus',()=>{if(previewSelect.matches(':focus-visible'))setGlare(previewRim,true)});
+ previewSelect.addEventListener('blur',()=>{if(!previewSelect.matches(':hover'))setGlare(previewRim,false)});
+ syncPreviewSelection();
+function resize(){const u=stage.getBoundingClientRect().width/1920;document.documentElement.style.setProperty('--u',u+'px');updateMenuAssembly();if(dialog.open){paintCancel();paintYes();controlGlare(cancel);controlGlare(yes)}}new ResizeObserver(resize).observe(stage);resize();showCollection(Math.max(0,Math.min(drawer.menu.length-1,new URLSearchParams(location.search).has('builderFolder')?builderFolders.findIndex(n=>(n.directOnly?new Set([n.id]):folderDescendants(n.id)).has(new URLSearchParams(location.search).get('builderFolder'))):(Number(new URLSearchParams(location.search).get('folder'))||1)-1)),0);stage.dataset.ready='true';window.DSLibraryReady?.('drawer');stage.dataset.version='03nov-universal-drawers';stage.dataset.drawer=drawerID;
  const resumeKey='ds-drawer-refresh-'+drawerID;
  try{const saved=JSON.parse(sessionStorage.getItem(resumeKey)||'null');if(saved){sessionStorage.removeItem(resumeKey);const i=drawer.menu.indexOf(saved.group);if(i>=0){showCollection(i,saved.sub);scroll.scrollTop=saved.scroll;}}}catch{}
  window.libraryBeforeRefresh=()=>sessionStorage.setItem(resumeKey,JSON.stringify({group:drawer.menu[activeGroup],sub:activeSub,scroll:scroll.scrollTop}));
 
  // Refresh the catalogue when returning to the test; retain existing checks and current folder.
  false&&window.addEventListener('focus',async()=>{try{const r=await fetch('/asset-library/data/bins.json');if(!r.ok)return;const j=await r.json();const next=[...j.bins.filter(a=>a.download_ready!==false),...brandAssets];if(JSON.stringify(next.map(a=>a.id+':'+a.revision))!==JSON.stringify(assets.map(a=>a.id+':'+a.revision))){assets=next;showCollection(activeGroup,activeSub)}}catch{}});
-})().catch(error=>{const e=document.createElement('p');e.className='load-error';e.setAttribute('role','alert');e.textContent=error.message||'The library could not load. Refresh to try again.';document.querySelector('#layout-stage').append(e)});
+})().catch(error=>{if(window.DSLibraryLoadFailed){window.DSLibraryLoadFailed();return;}const e=document.createElement('p');e.className='load-error';e.setAttribute('role','alert');e.textContent=error.message||'The library could not load. Refresh to try again.';document.querySelector('#layout-stage').append(e)});

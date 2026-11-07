@@ -83,7 +83,7 @@
    caption.dataset.ownerCaption='inter-regular';
   }
   await Promise.all([document.fonts.load('40px OwnerDisplay61'),document.fonts.load('16px OwnerSupport61'),document.fonts.load('400 44.9733px Inter')]);
-  controller.fit();window.dispatchEvent(new Event('ownerlayoutready'));
+  controller.fit();window.dispatchEvent(new Event('ownerlayoutready'));window.DSLibraryReady?.('layout');
  }).catch(error=>console.warn(error.message));
  for(const event of ['resize','drawerchange','libraryaccountchange','ownerlayoutready'])window.addEventListener(event,controller.fit);
  new ResizeObserver(controller.fit).observe(main);
