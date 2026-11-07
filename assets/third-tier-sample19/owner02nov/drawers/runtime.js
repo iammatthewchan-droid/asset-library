@@ -205,7 +205,7 @@ function makePlaque(link,id){
  for(const rec of menuRecords)menuAssembly.append(rec.art);
  fresh(menuOverlay);stage.append(menuOverlay);
  function updateMenuAssembly(){
-   if(innerWidth<=700){menuScale=1;setMenu();return}
+   if(innerWidth<1200){menuScale=1;setMenu();return}
    const stageBox=stage.getBoundingClientRect(),u=stageBox.width/1920;
    const available=scroll.getBoundingClientRect().left-stageBox.left-logoBox.x*u-menuRightPixels-menuPanelGapPixels;
    menuScale=Math.min(menuMaximumScale,available/((extendedRight-logoBox.x)*u));
@@ -214,15 +214,16 @@ function makePlaque(link,id){
    setMenu();
  }
  function placeMenu(rec,target,visible,dimmed){
-   rec.hit.hidden=!visible;rec.art.style.visibility=visible?'visible':'hidden';
+   rec.hit.style.setProperty('--menu-ratio',String(rec.box.w/rec.box.h));rec.hit.hidden=!visible;rec.art.style.visibility=visible?'visible':'hidden';
    rec.art.style.opacity=dimmed?'0.28':'1';
    // Native tier dimensions already encode the owner's size reduction.
    // Do not invent another scale factor or resize outlined lettering.
    rec.art.style.transform=`translate(${target.x-rec.box.x}px,${target.y-rec.box.y}px)`;
    rec.art.classList.toggle('menu-receded',dimmed);
    const x=logoBox.x+menuScale*(target.x-logoBox.x),y=logoBox.y+menuScale*(target.y-logoBox.y);
-   rec.hit.style.cssText=`left:calc(${x} * var(--u) + ${menuRightPixels}px);top:calc(${y} * var(--u));width:calc(${rec.box.w*menuScale} * var(--u));height:calc(${rec.box.h*menuScale} * var(--u));z-index:${10+rec.level};clip-path:url(#${rec.clipID})`;
-   rec.hit.setAttribute('aria-pressed',String(rec.level===0?activeGroup===rootRecords.indexOf(rec):rec.level===1?currentBrand===rec.label:menuState.format===rec.label));
+   rec.hit.style.cssText=`--menu-ratio:${rec.box.w/rec.box.h};left:calc(${x} * var(--u) + ${menuRightPixels}px);top:calc(${y} * var(--u));width:calc(${rec.box.w*menuScale} * var(--u));height:calc(${rec.box.h*menuScale} * var(--u));z-index:${10+rec.level};clip-path:url(#${rec.clipID})`;
+   if(innerWidth<1200){const parent=rec.level===0?rec:(rec.parentRecord||rootRecords.find(r=>r.label===(rec.parentRoot||'Logo')));rec.hit.style.order=String(Math.max(0,rootRecords.indexOf(parent))*100+(rec.level===0?0:rec.level===1?10+brandRecords.indexOf(rec):80+formatRecords.indexOf(rec)));}
+   rec.hit.setAttribute('aria-pressed' ,String(rec.level===0?activeGroup===rootRecords.indexOf(rec):rec.level===1?activeSub===rec.label:menuState.format===rec.label));
    if(!visible)setGlare(rec.path,false);
  }
  function originalSetMenu(){
@@ -258,7 +259,7 @@ function makePlaque(link,id){
  }
  function closeMenu(){clearTimeout(menuTimer);menuState.root=menuState.brand=menuState.format=null;setMenu()}
  // Return to resting state outside the menu; preserve submenu travel corridors.
- function deferCloseMenu(){clearTimeout(menuTimer);menuTimer=setTimeout(()=>{if(!hoveredMenu&&!stage.dataset.menuTravel&&!menuKeyboard)closeMenu()},120)}
+ function deferCloseMenu(){if(innerWidth<1200)return;clearTimeout(menuTimer);menuTimer=setTimeout(()=>{if(!hoveredMenu&&!stage.dataset.menuTravel&&!menuKeyboard)closeMenu()},120)}
 
  function resetOutsideMenu(e){if(e.pointerType==='touch'||e.target.closest?.('.menu-hit,.menu-corridor'))return;if(!menuState.root)return;hoveredMenu=null;menuKeyboard=false;delete stage.dataset.menuTravel;menuRecords.forEach(r=>setGlare(r.path,false));if(e.type==='pointerdown')closeMenu();else deferCloseMenu()}
  document.addEventListener('pointermove',resetOutsideMenu);document.addEventListener('pointerdown',resetOutsideMenu);
@@ -422,7 +423,7 @@ function makePlaque(link,id){
     const o=childOrigin();brandRecords.forEach(r=>{const i=children.indexOf(r);placeMenu(r,{x:o.x,y:o.y+Math.max(0,i)*brandStride},open&&i>=0,false)});
     placeCorridor(menuCorridors[0],{x:o.x,y:o.y-branchGap-2,w:brandDock.w,h:Math.max(0,children.length-1)*brandStride+brandDock.h+branchGap+2},open,1);menuCorridors[1].hidden=true;
   }
-  function activateMenu(rec,pointer){clearTimeout(menuTimer);if(pointer){if(hoveredMenu&&hoveredMenu!==rec)setGlare(hoveredMenu.path,false);hoveredMenu=rec;setGlare(rec.path,true)}if(rec.level===0){menuState.root=rec.label;menuState.brand=null;showCollection(rootRecords.indexOf(rec),0)}else{menuState.root=rec.parentRecord.label;menuState.brand=rec.label;showCollection(rootRecords.indexOf(rec.parentRecord),rec.label)}setMenu()}
+  function activateMenu(rec,pointer){if(pointer&&innerWidth<1200)return;clearTimeout(menuTimer);if(pointer){if(hoveredMenu&&hoveredMenu!==rec)setGlare(hoveredMenu.path,false);hoveredMenu=rec;setGlare(rec.path,true)}if(rec.level===0){menuState.root=rec.label;menuState.brand=null;showCollection(rootRecords.indexOf(rec),0)}else{menuState.root=rec.parentRecord.label;menuState.brand=rec.label;showCollection(rootRecords.indexOf(rec.parentRecord),rec.label)}setMenu()}
   function menuKey(rec,e){menuKeyboard=true;const peers=rec.level?currentChildren():rootRecords;if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();peers[(peers.indexOf(rec)+(e.key==='ArrowDown'?1:peers.length-1))%peers.length].hit.focus()}else if(e.key==='ArrowRight'&&!rec.level&&brandRecords.some(r=>r.parentRecord===rec)){e.preventDefault();activateMenu(rec,false);currentChildren()[0].hit.focus()}else if(e.key==='Escape'||e.key==='ArrowLeft'){e.preventDefault();if(rec.level)rec.parentRecord.hit.focus();else closeMenu()}}
   reset.onclick=()=>{closeMenu();showCollection(0,0)};
 
@@ -471,7 +472,7 @@ function makePlaque(link,id){
 const mobileHeader=H('header','mobile-library-header');
  const mobileHome=H('a','','DeepStack · Asset Library');mobileHome.href='/asset-library/next19.html?drawer=all';mobileHeader.append(mobileHome,H('div','',document.querySelector('h1')?.textContent.replace(/^Asset Library — /,'')||'Asset Library'));stage.append(mobileHeader);
  const mobileNav=H('nav','mobile-library-nav');mobileNav.setAttribute('aria-label','Folders');stage.append(mobileNav);
- for(const rec of menuRecords){const art=S('svg',{class:'mobile-menu-art',viewBox:`${rec.box.x} ${rec.box.y} ${rec.box.w} ${rec.box.h}`,'aria-hidden':'true'});const copy=rec.art.cloneNode(true);copy.removeAttribute('transform');copy.style.visibility='visible';copy.style.opacity='1';copy.querySelectorAll('.native-glare').forEach(x=>x.remove());art.append(copy);rec.hit.append(art);mobileNav.append(rec.hit);}
+ for(const rec of menuRecords){rec.hit.style.setProperty('--menu-ratio',String(rec.box.w/rec.box.h));const art=S('svg',{class:'mobile-menu-art',style:`aspect-ratio:${rec.box.w/rec.box.h}`,viewBox:`${rec.box.x} ${rec.box.y} ${rec.box.w} ${rec.box.h}`,'aria-hidden':'true'});const copy=rec.art.cloneNode(true);copy.removeAttribute('transform');copy.style.visibility='visible';copy.style.opacity='1';copy.querySelectorAll('.native-glare').forEach(x=>x.remove());art.append(copy);rec.hit.append(art);mobileNav.append(rec.hit);}
  function resize(){const u=stage.getBoundingClientRect().width/1920;document.documentElement.style.setProperty('--u',u+'px');updateMenuAssembly();if(dialog.open){paintCancel();paintYes();controlGlare(cancel);controlGlare(yes)}}new ResizeObserver(resize).observe(stage);resize();showCollection(Math.max(0,Math.min(drawer.menu.length-1,new URLSearchParams(location.search).has('builderFolder')?builderFolders.findIndex(n=>(n.directOnly?new Set([n.id]):folderDescendants(n.id)).has(new URLSearchParams(location.search).get('builderFolder'))):(Number(new URLSearchParams(location.search).get('folder'))||1)-1)),0);stage.dataset.ready='true';window.DSLibraryReady?.('drawer');stage.dataset.version='03nov-universal-drawers';stage.dataset.drawer=drawerID;
  const resumeKey='ds-drawer-refresh-'+drawerID;
  try{const saved=JSON.parse(sessionStorage.getItem(resumeKey)||'null');if(saved){sessionStorage.removeItem(resumeKey);const i=drawer.menu.indexOf(saved.group);if(i>=0){showCollection(i,saved.sub);scroll.scrollTop=saved.scroll;}}}catch{}

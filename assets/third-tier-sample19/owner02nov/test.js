@@ -229,7 +229,7 @@ function makePlaque(link,id){
  for(const rec of menuRecords)menuAssembly.append(rec.art);
  fresh(menuOverlay);stage.append(menuOverlay);
  function updateMenuAssembly(){
-   if(innerWidth<=700){menuScale=1;setMenu();return}
+   if(innerWidth<1200){menuScale=1;setMenu();return}
    const stageBox=stage.getBoundingClientRect(),u=stageBox.width/1920;
    const available=scroll.getBoundingClientRect().left-stageBox.left-logoBox.x*u-menuRightPixels-menuPanelGapPixels;
    menuScale=Math.min(menuMaximumScale,available/((extendedRight-logoBox.x)*u));
@@ -238,15 +238,16 @@ function makePlaque(link,id){
    setMenu();
  }
  function placeMenu(rec,target,visible,dimmed){
-   rec.hit.hidden=!visible;rec.art.style.visibility=visible?'visible':'hidden';
+   rec.hit.style.setProperty('--menu-ratio',String(rec.box.w/rec.box.h));rec.hit.hidden=!visible;rec.art.style.visibility=visible?'visible':'hidden';
    rec.art.style.opacity=dimmed?'0.28':'1';
    // Native tier dimensions already encode the owner's size reduction.
    // Do not invent another scale factor or resize outlined lettering.
    rec.art.style.transform=`translate(${target.x-rec.box.x}px,${target.y-rec.box.y}px)`;
    rec.art.classList.toggle('menu-receded',dimmed);
    const x=logoBox.x+menuScale*(target.x-logoBox.x),y=logoBox.y+menuScale*(target.y-logoBox.y);
-   rec.hit.style.cssText=`left:calc(${x} * var(--u) + ${menuRightPixels}px);top:calc(${y} * var(--u));width:calc(${rec.box.w*menuScale} * var(--u));height:calc(${rec.box.h*menuScale} * var(--u));z-index:${10+rec.level};clip-path:url(#${rec.clipID})`;
-   rec.hit.setAttribute('aria-pressed',String(rec.level===0?activeGroup===rootRecords.indexOf(rec):rec.level===1?currentBrand===rec.label:menuState.format===rec.label));
+   rec.hit.style.cssText=`--menu-ratio:${rec.box.w/rec.box.h};left:calc(${x} * var(--u) + ${menuRightPixels}px);top:calc(${y} * var(--u));width:calc(${rec.box.w*menuScale} * var(--u));height:calc(${rec.box.h*menuScale} * var(--u));z-index:${10+rec.level};clip-path:url(#${rec.clipID})`;
+   if(innerWidth<1200){const parent=rec.level===0?rec:(rec.parentRecord||rootRecords.find(r=>r.label===(rec.parentRoot||'Logo')));rec.hit.style.order=String(Math.max(0,rootRecords.indexOf(parent))*100+(rec.level===0?0:rec.level===1?10+brandRecords.indexOf(rec):80+formatRecords.indexOf(rec)));}
+   rec.hit.setAttribute('aria-pressed' ,String(rec.level===0?activeGroup===rootRecords.indexOf(rec):rec.level===1?currentBrand===rec.label:menuState.format===rec.label));
    if(!visible)setGlare(rec.path,false);
  }
  function setMenu(){
@@ -274,7 +275,7 @@ function makePlaque(link,id){
    const formatTop=formatRecords[0].box,formatBottom=formatRecords[1].box;
    placeCorridor(menuCorridors[1],{x:formatTop.x+brandRest.x-brandDock.x,y:formatTop.y+brandRest.y+activeBrandIndex*brandStride-brandDock.y,w:Math.max(formatTop.w,formatBottom.w),h:formatBottom.y+formatBottom.h-formatTop.y},brandOpen,2);
  }
- function activateMenu(rec,pointer){
+ function activateMenu(rec,pointer){if(pointer&&innerWidth<1200)return;
    stage.dataset.menuActivation=pointer?'hover':'keyboard-or-click';
    clearTimeout(menuTimer);
    if(pointer){if(hoveredMenu&&hoveredMenu!==rec)setGlare(hoveredMenu.path,false);hoveredMenu=rec;setGlare(rec.path,true)}
@@ -286,7 +287,7 @@ function makePlaque(link,id){
  }
  function closeMenu(){clearTimeout(menuTimer);menuState.root=menuState.brand=menuState.format=null;setMenu()}
  // Return to resting state outside the menu; preserve submenu travel corridors.
- function deferCloseMenu(){clearTimeout(menuTimer);menuTimer=setTimeout(()=>{if(!hoveredMenu&&!stage.dataset.menuTravel&&!menuKeyboard)closeMenu()},120)}
+ function deferCloseMenu(){if(innerWidth<1200)return;clearTimeout(menuTimer);menuTimer=setTimeout(()=>{if(!hoveredMenu&&!stage.dataset.menuTravel&&!menuKeyboard)closeMenu()},120)}
 
  function resetOutsideMenu(e){if(e.pointerType==='touch'||e.target.closest?.('.menu-hit,.menu-corridor'))return;if(!menuState.root)return;hoveredMenu=null;menuKeyboard=false;delete stage.dataset.menuTravel;menuRecords.forEach(r=>setGlare(r.path,false));if(e.type==='pointerdown')closeMenu();else deferCloseMenu()}
  document.addEventListener('pointermove',resetOutsideMenu);document.addEventListener('pointerdown',resetOutsideMenu);
@@ -453,7 +454,7 @@ function makePlaque(link,id){
 const mobileHeader=H('header','mobile-library-header');
  const mobileHome=H('a','','DeepStack · Asset Library');mobileHome.href='/asset-library/next19.html?drawer=all';mobileHeader.append(mobileHome,H('div','',document.querySelector('h1')?.textContent.replace(/^Asset Library — /,'')||'Asset Library'));stage.append(mobileHeader);
  const mobileNav=H('nav','mobile-library-nav');mobileNav.setAttribute('aria-label','Folders');stage.append(mobileNav);
- for(const rec of menuRecords){const art=S('svg',{class:'mobile-menu-art',viewBox:`${rec.box.x} ${rec.box.y} ${rec.box.w} ${rec.box.h}`,'aria-hidden':'true'});const copy=rec.art.cloneNode(true);copy.removeAttribute('transform');copy.style.visibility='visible';copy.style.opacity='1';copy.querySelectorAll('.native-glare').forEach(x=>x.remove());art.append(copy);rec.hit.append(art);mobileNav.append(rec.hit);}
+ for(const rec of menuRecords){rec.hit.style.setProperty('--menu-ratio',String(rec.box.w/rec.box.h));const art=S('svg',{class:'mobile-menu-art',style:`aspect-ratio:${rec.box.w/rec.box.h}`,viewBox:`${rec.box.x} ${rec.box.y} ${rec.box.w} ${rec.box.h}`,'aria-hidden':'true'});const copy=rec.art.cloneNode(true);copy.removeAttribute('transform');copy.style.visibility='visible';copy.style.opacity='1';copy.querySelectorAll('.native-glare').forEach(x=>x.remove());art.append(copy);rec.hit.append(art);mobileNav.append(rec.hit);}
  function resize(){const u=stage.getBoundingClientRect().width/1920;document.documentElement.style.setProperty('--u',u+'px');updateMenuAssembly();if(dialog.open){paintCancel();paintYes();controlGlare(cancel);controlGlare(yes)}}new ResizeObserver(resize).observe(stage);resize();showCollection(({font:1,color:2,mov:3})[new URLSearchParams(location.search).get('folder')]||0,new URLSearchParams(location.search).get('subfolder')==='title'?'title':0);if(new URLSearchParams(location.search).get('subfolder')==='title'){menuState.root='.mov';menuState.brand='Title';setMenu()}stage.dataset.ready='true';window.DSLibraryReady?.('drawer');stage.dataset.version='02nov-logo-home';
  // Refresh the catalogue when returning to the test; retain existing checks and current folder.
  window.addEventListener('focus',async()=>{try{const r=await fetch('/asset-library/data/bins.json');if(!r.ok)return;const j=await r.json();const next=[...j.bins.filter(a=>a.download_ready!==false),...brandAssets,...await deepVisionPdfs()];if(JSON.stringify(next.map(a=>a.id+':'+a.revision))!==JSON.stringify(assets.map(a=>a.id+':'+a.revision))){assets=next;showCollection(activeGroup,activeSub)}}catch{}});
