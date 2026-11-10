@@ -6,5 +6,13 @@
       "source": "/asset-library/:path*",
       "destination": "/:path*"
     }
+  ],
+  "outputDirectory": ".",
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/asset-library/next19.html?drawer=all",
+      "permanent": false
+    }
   ]
 }
