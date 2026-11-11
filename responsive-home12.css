@@ -1,0 +1,97 @@
+/* Fit the complete owner homepage to the available viewport; preserve native SVGs. */
+html:has(body[data-home-fit]) { width:100%; height:100%; }
+body[data-home-fit][data-view=overview] {
+  --home-pad:clamp(14px,2.2vw,44px);
+  --home-gap:clamp(8px,1.6vw,30px);
+  box-sizing:border-box;
+  width:100%; height:100dvh; min-height:0;
+  padding:var(--home-pad);
+  display:flex; flex-direction:column; gap:clamp(10px,2dvh,24px);
+}
+body[data-home-fit][data-view=overview] header {
+  flex:none; display:flex; align-items:center; justify-content:space-between;
+  position:relative; width:100%; height:auto; min-height:0;
+  padding:0; margin:0; gap:var(--home-gap);
+}
+body[data-home-fit][data-view=overview] .brand-home {
+  position:relative; inset:auto; width:min(68%,820px); height:auto;
+  max-width:none; transform:none; margin:0;
+}
+body[data-home-fit][data-view=overview] header .edition { display:none; }
+body[data-home-fit][data-view=overview] .overview-utilities {
+  position:relative; inset:auto; width:clamp(98px,20vw,240px); height:auto;
+  min-height:0; display:block; margin:0;
+}
+body[data-home-fit][data-view=overview] .overview-utilities .inventory {
+  position:relative; inset:auto; width:100%; height:auto; margin:0;
+}
+body[data-home-fit][data-view=overview] .overview-utilities .library-account { display:none; }
+body[data-home-fit][data-view=overview] .layout {
+  position:relative; width:100%; min-height:0; margin:0;
+  display:block; flex:1;
+}
+body[data-home-fit][data-view=overview] .layout>main {
+  position:relative; width:100%; height:100%; min-height:0;
+  padding:0; margin:0; display:flex; flex-direction:column;
+}
+body[data-home-fit][data-view=overview] .intro {
+  position:relative; inset:auto; width:100%; height:auto; min-height:0;
+  padding:0; margin:0; flex:none;
+}
+body[data-home-fit][data-view=overview] #title {
+  position:relative; inset:auto; width:min(56vw,700px); height:auto; margin:0;
+}
+body[data-home-fit][data-view=overview] .index-row {
+  position:relative; inset:auto; width:clamp(125px,14vw,220px); height:auto;
+  margin:2px 0 clamp(8px,1.5dvh,18px); flex:none;
+}
+body[data-home-fit][data-view=overview] #overview { flex:1; min-height:0; position:relative; padding:0; }
+body[data-home-fit][data-view=overview] #overview>.section-bar { display:none; }
+body[data-home-fit][data-view=overview] .layout .grid.enamel-grid {
+  position:relative; inset:auto; width:100%; height:100%; min-height:0;
+  display:grid; grid-template-columns:repeat(var(--home-cols,4),minmax(0,1fr));
+  grid-template-rows:repeat(var(--home-rows,3),minmax(0,1fr));
+  align-items:center; align-content:stretch;
+  gap:clamp(4px,1.3dvh,18px) var(--home-gap); margin:0!important;
+  pointer-events:auto;
+}
+body[data-home-fit][data-view=overview] .layout #grid .badge-drawer {
+  position:relative; inset:auto; width:var(--home-badge-width,100%); max-width:100%;
+  scale:1; min-height:0; justify-self:center;
+}
+body[data-home-fit][data-view=overview] .ambient-smoke {
+  position:fixed!important; inset:0!important; width:100vw!important; height:100dvh!important;
+}
+body[data-home-fit][data-view=overview] .ambient-smoke-layer {
+  position:absolute!important; inset:0!important; width:100%!important; height:100%!important; transform:none!important;
+}
+@media(orientation:portrait){
+  body[data-home-fit][data-view=overview] #title { width:min(100%,600px); }
+}
+@media(max-height:500px) and (orientation:landscape){
+  body[data-home-fit][data-view=overview] { --home-pad:12px; gap:6px; }
+  body[data-home-fit][data-view=overview] .brand-home { width:min(54%,460px); }
+  body[data-home-fit][data-view=overview] #title { width:min(45vw,420px); }
+  body[data-home-fit][data-view=overview] .index-row { margin-bottom:4px; width:125px; }
+}
+body[data-home-fit][data-view=overview] header { flex-direction:row; flex-wrap:nowrap; }
+body[data-home-fit][data-view=overview] .layout>aside { position:fixed; inset:0 auto 0 0; z-index:20; }
+body[data-home-fit][data-view=overview] .layout>main>.library-toolbar,
+body[data-home-fit][data-view=overview] .layout>main>.library-status,
+body[data-home-fit][data-view=overview] .layout>main>.asset-workspace { display:none; margin:0; }
+@media(max-height:500px) and (orientation:landscape){
+  body[data-home-fit][data-view=overview] .brand-home { width:min(46%,370px); }
+  body[data-home-fit][data-view=overview] #title { width:min(38vw,345px); }
+  body[data-home-fit][data-view=overview] .index-row { width:112px; }
+}
+@media(min-width:1200px){
+  body[data-home-fit][data-view=overview] header .edition {
+    display:block; position:absolute; inset:0 0 auto auto;
+    font:400 clamp(10px,.85vw,14px)/1.2 OwnerEdition61,Inter,sans-serif;
+    letter-spacing:.08em; margin:0;
+  }
+}
+/* Preserve native hover growth while anchoring edge badges inside the viewport. */
+body[data-home-fit][data-view=overview] .layout #grid .badge-last-column { transform-origin:right center!important; }
+body[data-home-fit][data-view=overview] .layout #grid .badge-home-last-row { transform-origin:left bottom!important; }
+body[data-home-fit][data-view=overview] .layout #grid .badge-home-last-row.badge-last-column { transform-origin:right bottom!important; }

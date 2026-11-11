@@ -38,6 +38,8 @@ function makePlaque(link,id){
 'use strict';
 (async()=>{
  const stage=document.querySelector('#layout-stage'),NS='http://www.w3.org/2000/svg';
+ const gallery=window.DSGalleryLayout?.(stage);
+ let projectMenu=null;
  const S=(tag,attrs={})=>{const e=document.createElementNS(NS,tag);for(const[k,v]of Object.entries(attrs))e.setAttribute(k,v);return e};
  const H=(tag,cls='',text='')=>{const e=document.createElement(tag);e.className=cls;e.textContent=text;return e};
  const [ownerRaw,raw,catalog,brandAssets,headingRaw]=await Promise.all([fetch('/asset-library/assets/third-tier-sample19/owner02nov/owner-reference.svg').then(r=>{if(!r.ok)throw Error('Updated layout could not load.');return r.text()}),fetch('/asset-library/assets/third-tier-sample19/owner27/owner-reference.svg').then(r=>{if(!r.ok)throw Error('Layout could not load. Refresh to try again.');return r.text()}),fetch('/asset-library/data/bins.json').then(r=>{if(!r.ok)throw Error('Assets could not load. Refresh to try again.');return r.json()}),fetch('/asset-library/assets/third-tier-sample19/owner02nov/brands/brand-assets.json').then(r=>{if(!r.ok)throw Error('Brand assets could not load.');return r.json()}),fetch('/asset-library/assets/third-tier-sample19/owner02nov/drawers/'+drawerID+'.svg').then(r=>{if(!r.ok)throw Error('Heading could not load.');return r.text()})]);
@@ -95,6 +97,7 @@ function makePlaque(link,id){
  const preview=H('section','asset-preview');preview.setAttribute('aria-label','Enlarged asset preview');const image=H('img','preview-image');image.alt='';image.draggable=false;preview.append(image);stage.append(preview);
  const movie=H('video','preview-movie');movie.muted=true;movie.defaultMuted=true;movie.loop=true;movie.playsInline=true;movie.preload='metadata';movie.hidden=true;movie.setAttribute('aria-label','Movie preview');movie.style.cssText='width:100%;height:100%;object-fit:contain;background:#000;pointer-events:none';preview.append(movie);
  function paintPreviewMedia(asset,live){
+  if(gallery)return;
   const isMovie=/\.(mp4|mov|m4v|webm)$/i.test(asset.extension||asset.filename||'')&&!!asset.download_url;
   if(!isMovie){movie.pause();movie.hidden=true;image.hidden=false;return}
   if(movie.dataset.assetId!==asset.id){movie.pause();movie.dataset.assetId=asset.id;movie.src=asset.download_url;movie.poster=asset.thumbnail_url;}
@@ -149,6 +152,13 @@ function makePlaque(link,id){
    const hit=H('button','menu-hit');hit.type='button';hit.setAttribute('aria-label',label);
    hit.dataset.menuTier=level;hit.dataset.menuLabel=label;stage.append(hit);
    const path=art.querySelector(':scope>path')||art.querySelector('path');
+   if(gallery){
+     for(let node=path;node!==art;node=node.parentNode){
+       for(const sibling of node.parentNode.children){
+         if(sibling!==node)sibling.classList.add('gallery-menu-lettering');
+       }
+     }
+   }
    const clipID='owner02-menu-hit-'+menuHitSequence++,clip=S('clipPath',{id:clipID,clipPathUnits:'objectBoundingBox'});
    const local=art.getCTM().inverse().multiply(path.getCTM());
    const norm=new DOMMatrix([1/box.w,0,0,1/box.h,-box.x/box.w,-box.y/box.h]).multiply(local);
@@ -182,6 +192,11 @@ function makePlaque(link,id){
  });
  function placeCorridor(el,box,visible,level){
    el.hidden=!visible;
+   if(projectMenu){
+     const boxOnScreen=projectMenu(box);
+     el.style.cssText=`position:absolute;left:${boxOnScreen.left}px;top:${boxOnScreen.top}px;width:${boxOnScreen.width}px;height:${boxOnScreen.height}px;z-index:${9+level}`;
+     return;
+   }
    const x=logoBox.x+menuScale*(box.x-logoBox.x),y=logoBox.y+menuScale*(box.y-logoBox.y);
    el.style.cssText=`position:absolute;left:calc(${x} * var(--u) + ${menuRightPixels}px);top:calc(${y} * var(--u));width:calc(${box.w*menuScale} * var(--u));height:calc(${box.h*menuScale} * var(--u));z-index:${9+level};background:transparent;`;
  }
@@ -192,7 +207,7 @@ function makePlaque(link,id){
  const brandRest={x:logoBox.x+logoBox.w+logoBox.h/2-brandDock.w,y:logoBox.y+logoBox.h+branchGap};
  // Owner clearance correction supersedes the oversized 150% menu.
  // Reserve space for the fully extended branch before choosing one uniform scale.
- const menuMaximumScale=1.2,menuRightPixels=50,menuPanelGapPixels=32;
+ const menuMaximumScale=.99,menuRightPixels=14,menuPanelGapPixels=22;
  let menuScale=menuMaximumScale;
  const extendedRight=Math.max(...rootRecords.map(r=>r.box.x+r.box.w),brandRest.x+brandDock.w,...formatRecords.map(r=>r.box.x+brandRest.x-brandDock.x+r.box.w));
  const menuOverlay=S('svg',{id:'menu-art-overlay',viewBox:'0 0 1920 1080','aria-hidden':'true'});
@@ -205,6 +220,9 @@ function makePlaque(link,id){
  for(const rec of menuRecords)menuAssembly.append(rec.art);
  fresh(menuOverlay);stage.append(menuOverlay);
  function updateMenuAssembly(){
+   projectMenu=gallery?.wideLayout()?gallery.projectMenu(logoBox,menuOverlay,menuAssembly):null;
+   if(projectMenu){setMenu();return}
+   if(gallery)menuOverlay.setAttribute('viewBox','0 0 1920 1080');
    if(innerWidth<1200){menuScale=1;setMenu();return}
    const stageBox=stage.getBoundingClientRect(),u=stageBox.width/1920;
    const available=scroll.getBoundingClientRect().left-stageBox.left-logoBox.x*u-menuRightPixels-menuPanelGapPixels;
@@ -224,6 +242,19 @@ function makePlaque(link,id){
    rec.hit.style.cssText=`--menu-ratio:${rec.box.w/rec.box.h};left:calc(${x} * var(--u) + ${menuRightPixels}px);top:calc(${y} * var(--u));width:calc(${rec.box.w*menuScale} * var(--u));height:calc(${rec.box.h*menuScale} * var(--u));z-index:${10+rec.level};clip-path:url(#${rec.clipID})`;
    if(innerWidth<1200){const parent=rec.level===0?rec:(rec.parentRecord||rootRecords.find(r=>r.label===(rec.parentRoot||'Logo')));rec.hit.style.order=String(Math.max(0,rootRecords.indexOf(parent))*100+(rec.level===0?0:rec.level===1?10+brandRecords.indexOf(rec):80+formatRecords.indexOf(rec)));}
    rec.hit.setAttribute('aria-pressed' ,String(rec.level===0?activeGroup===rootRecords.indexOf(rec):rec.level===1?activeSub===rec.label:menuState.format===rec.label));
+   if(projectMenu){
+     const height=rec.box.h*projectMenu.scale;
+     const factor=rec.level===2?Math.max(1,24/height):1;
+     const box=projectMenu({...target,w:rec.box.w*factor,h:rec.box.h*factor});
+     if(factor>1)rec.art.style.transform=`translate(${target.x}px,${target.y}px) scale(${factor}) translate(${-rec.box.x}px,${-rec.box.y}px)`;
+     rec.hit.style.setProperty('--menu-x',box.left+'px');
+     rec.hit.style.setProperty('--menu-y',box.top+'px');
+     rec.hit.style.setProperty('--menu-w',box.width+'px');
+     rec.hit.style.setProperty('--menu-h',box.height+'px');
+     rec.hit.style.setProperty('--menu-z',10+rec.level);
+     rec.hit.style.setProperty('--menu-clip',`url(#${rec.clipID})`);
+     rec.hit.style.setProperty('--menu-opacity',dimmed?'.34':'1');
+   }
    if(!visible)setGlare(rec.path,false);
  }
  function originalSetMenu(){
@@ -259,9 +290,9 @@ function makePlaque(link,id){
  }
  function closeMenu(){clearTimeout(menuTimer);menuState.root=menuState.brand=menuState.format=null;setMenu()}
  // Return to resting state outside the menu; preserve submenu travel corridors.
- function deferCloseMenu(){if(innerWidth<1200)return;clearTimeout(menuTimer);menuTimer=setTimeout(()=>{if(!hoveredMenu&&!stage.dataset.menuTravel&&!menuKeyboard)closeMenu()},120)}
+ function deferCloseMenu(){if(innerWidth<1200&&!projectMenu)return;clearTimeout(menuTimer);menuTimer=setTimeout(()=>{if(!hoveredMenu&&!stage.dataset.menuTravel&&!menuKeyboard)closeMenu()},120)}
 
- function resetOutsideMenu(e){if(e.pointerType==='touch'||e.target.closest?.('.menu-hit,.menu-corridor'))return;if(!menuState.root)return;hoveredMenu=null;menuKeyboard=false;delete stage.dataset.menuTravel;menuRecords.forEach(r=>setGlare(r.path,false));if(e.type==='pointerdown')closeMenu();else deferCloseMenu()}
+ function resetOutsideMenu(e){if(e.pointerType==='touch'||e.target.closest?.('.menu-hit,.menu-corridor,.gallery-viewer'))return;if(!menuState.root)return;hoveredMenu=null;menuKeyboard=false;delete stage.dataset.menuTravel;menuRecords.forEach(r=>setGlare(r.path,false));if(e.type==='pointerdown')closeMenu();else deferCloseMenu()}
  document.addEventListener('pointermove',resetOutsideMenu);document.addEventListener('pointerdown',resetOutsideMenu);
  function chooseBrand(label){currentBrand=label;showCollection(0,0)}
  // Hover/focus changes the content immediately; crossing a protected gap does not.
@@ -319,12 +350,16 @@ function makePlaque(link,id){
 
  function paintCount(){for(const {button,label,list,name,selectAll,deselectAll}of downloadActions){const n=list.filter(a=>selected.has(a.id)).length;label.textContent=`Download (${n})`;button.setAttribute('aria-label',`Download ${name} (${n})`);button.disabled=busy||!n;if(selectAll)selectAll.disabled=busy||!list.length||n===list.length;if(deselectAll)deselectAll.disabled=busy||!n;for(const b of [button,selectAll,deselectAll])if(b?.disabled)setGlare(b.querySelector('svg>path'),false);}try{sessionStorage.setItem('ds-owner27-selected',JSON.stringify([...selected.keys()]))}catch{}for(const tile of scroll.querySelectorAll('[role=checkbox]')){const yes=selected.has(tile.dataset.assetId);tile.setAttribute('aria-checked',String(yes));tile.classList.toggle('checked',yes)}stage.dataset.selectedCount=String(selected.size);syncPreviewSelection()}
  function inspect(asset,live=false){previewAsset=asset;image.src=asset.thumbnail_url;image.hidden=false;filename.textContent=asset.filename;filename.hidden=false;stage.classList.toggle('previewing',live);preview.setAttribute('aria-label','Enlarged preview of '+asset.filename);paintPreviewMedia(asset,live);syncPreviewSelection()}
- function tile(asset){const b=H('button','asset-tile');b.type='button';b.setAttribute('role','checkbox');b.setAttribute('aria-label','Select '+asset.filename);b.setAttribute('aria-describedby','preview-filename');b.setAttribute('aria-checked',String(selected.has(asset.id)));b.dataset.assetId=asset.id;const frame=crop(firstTileFrame,tileRect);b.append(frame);const rim=frame.querySelector('path');addGlare(frame,rim,tileRect.width,{tinted:true});const img=H('img','tile-image');img.src=asset.thumbnail_url;img.alt='';img.draggable=false;img.loading='lazy';b.append(img);const c=S('g');const cp=clone(tilePaths[1]);cp.setAttribute('class','check-box-path');c.append(cp);c.append(S('path',{class:'check-tick',d:`M${checkRect.x+7},${checkRect.y+16} l6,6 l13,-15`,fill:'none',stroke:'#fff','stroke-width':4}));const check=crop(c,checkRect);check.classList.add('check-art');b.append(check);b.onpointerenter=()=>{lightTile(rim);inspect(asset,true)};b.onpointerleave=()=>{if(activeTileRim===rim)lightTile(null);stage.classList.remove('previewing')};b.onfocus=()=>{lightTile(rim);inspect(asset,true)};b.onblur=()=>{if(activeTileRim===rim)lightTile(null);stage.classList.remove('previewing')};b.onclick=()=>{inspect(asset,true);if(selected.has(asset.id))selected.delete(asset.id);else selected.set(asset.id,asset);paintCount()};return b}
+ function tile(asset){const b=H('button','asset-tile');b.type='button';b.setAttribute('role','checkbox');b.setAttribute('aria-label','Select '+asset.filename);b.setAttribute('aria-describedby','preview-filename');b.setAttribute('aria-checked',String(selected.has(asset.id)));b.dataset.assetId=asset.id;const frame=crop(firstTileFrame,tileRect);b.append(frame);const rim=frame.querySelector('path');addGlare(frame,rim,tileRect.width,{tinted:true});const img=H('img','tile-image');img.src=asset.thumbnail_url;img.alt='';img.draggable=false;img.loading='lazy';b.append(img);const c=S('g');const cp=clone(tilePaths[1]);cp.setAttribute('class','check-box-path');c.append(cp);c.append(S('path',{class:'check-tick',d:`M${checkRect.x+7},${checkRect.y+16} l6,6 l13,-15`,fill:'none',stroke:'#fff','stroke-width':4}));const check=crop(c,checkRect);check.classList.add('check-art');b.append(check);b.onpointerenter=()=>{lightTile(rim);if(!gallery)inspect(asset,true)};b.onpointerleave=()=>{if(activeTileRim===rim)lightTile(null);stage.classList.remove('previewing')};b.onfocus=()=>{lightTile(rim);if(!gallery)inspect(asset,true)};b.onblur=()=>{if(activeTileRim===rim)lightTile(null);stage.classList.remove('previewing')};b.onclick=()=>{if(!gallery)inspect(asset,true);if(selected.has(asset.id))selected.delete(asset.id);else selected.set(asset.id,asset);paintCount()};return b}
  function section(name,list){
   const s=H('section','asset-section');s.dataset.family=name;
   const h=H('h2','family-title');h.setAttribute('aria-label',name);
+  if(gallery&&name===drawer.title)h.classList.add('sr-only');
   if(name==='2D'||name==='3D')h.append(fresh(clone(name==='2D'?header2:header3)));else h.textContent=name;
-  s.append(h);const grid=H('div','tiles');for(const a of list)grid.append(tile(a));s.append(grid);
+  const grid=H('div','tiles');
+  const toolbar=gallery?.prepareSection(s,h,count,grid);
+  if(gallery)gallery.addTiles(grid,list,tile);
+  else{s.append(h);for(const a of list)grid.append(tile(a));s.append(grid)}
   const downloadable=list.filter(a=>a.download_url||a.official_url);
   if(!downloadable.length){scroll.append(s);return}
   const actions=H('div','section-actions');
@@ -343,7 +378,7 @@ function makePlaque(link,id){
   all.button.onclick=()=>{if(busy)return;for(const a of downloadable)selected.set(a.id,a);paintCount();announcement.textContent=downloadable.length+' '+name+' items selected';};
   download.button.onclick=()=>openDownload(downloadable.filter(a=>selected.has(a.id)),download.button);
   uncheck.button.setAttribute('aria-label','Deselect all '+name);uncheck.button.onclick=()=>{if(busy)return;for(const a of downloadable)selected.delete(a.id);paintCount();};
-  actions.append(all.button,uncheck.button,download.button);s.append(actions);
+  actions.append(all.button,uncheck.button,download.button);(toolbar||s).append(actions);
   downloadActions.push({button:download.button,label:download.label,list:downloadable,name,selectAll:all.button,deselectAll:uncheck.button});scroll.append(s);
  }
   function showCollection(group,sub){
@@ -351,7 +386,8 @@ function makePlaque(link,id){
  const name=drawer.menu[group]+(sub?' / '+sub:'');
  const parentFolder=builderFolders[group]||builderRoot;const folder=sub?builderCatalog.nodes.find(n=>n.parent===parentFolder?.id&&n.name===sub):parentFolder;const ids=folder?(folder.directOnly?new Set([folder.id]):folderDescendants(folder.id)):new Set();
  currentAssets=builderCatalog.assets.filter(a=>ids.has(a.folder));
- count.textContent='Total Items : '+currentAssets.length;section(name,currentAssets);
+ count.textContent=gallery?`${currentAssets.length} ${currentAssets.length===1?'item':'items'}`:'Total Items : '+currentAssets.length;section(gallery?(sub||drawer.menu[group]):name,currentAssets);
+ if(gallery&&!currentAssets.length)scroll.querySelector('.asset-section').append(H('p','empty-message','No assets in this folder yet.'));
  if(currentAssets.length)inspect(currentAssets[0]);else{movie.pause();movie.hidden=true;image.hidden=true;filename.hidden=true;previewAsset=null;}
  stage.dataset.visibleCount=String(currentAssets.length);announcement.textContent=name;paintCount();setMenu();
  }
@@ -423,7 +459,7 @@ function makePlaque(link,id){
     const o=childOrigin();brandRecords.forEach(r=>{const i=children.indexOf(r);placeMenu(r,{x:o.x,y:o.y+Math.max(0,i)*brandStride},open&&i>=0,false)});
     placeCorridor(menuCorridors[0],{x:o.x,y:o.y-branchGap-2,w:brandDock.w,h:Math.max(0,children.length-1)*brandStride+brandDock.h+branchGap+2},open,1);menuCorridors[1].hidden=true;
   }
-  function activateMenu(rec,pointer){if(pointer&&innerWidth<1200)return;clearTimeout(menuTimer);if(pointer){if(hoveredMenu&&hoveredMenu!==rec)setGlare(hoveredMenu.path,false);hoveredMenu=rec;setGlare(rec.path,true)}if(rec.level===0){menuState.root=rec.label;menuState.brand=null;showCollection(rootRecords.indexOf(rec),0)}else{menuState.root=rec.parentRecord.label;menuState.brand=rec.label;showCollection(rootRecords.indexOf(rec.parentRecord),rec.label)}setMenu()}
+  function activateMenu(rec,pointer){if(pointer&&innerWidth<1200&&!projectMenu)return;clearTimeout(menuTimer);if(pointer){if(hoveredMenu&&hoveredMenu!==rec)setGlare(hoveredMenu.path,false);hoveredMenu=rec;setGlare(rec.path,true)}if(rec.level===0){menuState.root=rec.label;menuState.brand=null;showCollection(rootRecords.indexOf(rec),0)}else{menuState.root=rec.parentRecord.label;menuState.brand=rec.label;showCollection(rootRecords.indexOf(rec.parentRecord),rec.label)}setMenu()}
   function menuKey(rec,e){menuKeyboard=true;const peers=rec.level?currentChildren():rootRecords;if(e.key==='ArrowDown'||e.key==='ArrowUp'){e.preventDefault();peers[(peers.indexOf(rec)+(e.key==='ArrowDown'?1:peers.length-1))%peers.length].hit.focus()}else if(e.key==='ArrowRight'&&!rec.level&&brandRecords.some(r=>r.parentRecord===rec)){e.preventDefault();activateMenu(rec,false);currentChildren()[0].hit.focus()}else if(e.key==='Escape'||e.key==='ArrowLeft'){e.preventDefault();if(rec.level)rec.parentRecord.hit.focus();else closeMenu()}}
   reset.onclick=()=>{closeMenu();showCollection(0,0)};
 
@@ -472,7 +508,19 @@ function makePlaque(link,id){
 const mobileHeader=H('header','mobile-library-header');
  const mobileHome=H('a','','DeepStack · Asset Library');mobileHome.href='/asset-library/next19.html?drawer=all';mobileHeader.append(mobileHome,H('div','',document.querySelector('h1')?.textContent.replace(/^Asset Library — /,'')||'Asset Library'));stage.append(mobileHeader);
  const mobileNav=H('nav','mobile-library-nav');mobileNav.setAttribute('aria-label','Folders');stage.append(mobileNav);
- for(const rec of menuRecords){rec.hit.style.setProperty('--menu-ratio',String(rec.box.w/rec.box.h));const art=S('svg',{class:'mobile-menu-art',style:`aspect-ratio:${rec.box.w/rec.box.h}`,viewBox:`${rec.box.x} ${rec.box.y} ${rec.box.w} ${rec.box.h}`,'aria-hidden':'true'});const copy=rec.art.cloneNode(true);copy.removeAttribute('transform');copy.style.visibility='visible';copy.style.opacity='1';copy.querySelectorAll('.native-glare').forEach(x=>x.remove());art.append(copy);rec.hit.append(art);mobileNav.append(rec.hit);}
+ for(const rec of menuRecords){
+  const {x,y,w,h}=rec.box;
+  const art=S('svg',{class:'mobile-menu-art',viewBox:`${x} ${y} ${w} ${h}`,'aria-hidden':'true'});
+  const surface=rec.path.cloneNode(true);
+  const local=rec.art.getCTM().inverse().multiply(rec.path.getCTM());
+  surface.removeAttribute('id');
+  surface.setAttribute('transform',`matrix(${local.a} ${local.b} ${local.c} ${local.d} ${local.e} ${local.f})`);
+  art.append(surface);
+  const label=H('span','mobile-menu-label',rec.label);
+  label.setAttribute('aria-hidden','true');
+  rec.hit.append(art,label);
+  mobileNav.append(rec.hit);
+ }
  function resize(){const u=stage.getBoundingClientRect().width/1920;document.documentElement.style.setProperty('--u',u+'px');updateMenuAssembly();if(dialog.open){paintCancel();paintYes();controlGlare(cancel);controlGlare(yes)}}new ResizeObserver(resize).observe(stage);resize();showCollection(Math.max(0,Math.min(drawer.menu.length-1,new URLSearchParams(location.search).has('builderFolder')?builderFolders.findIndex(n=>(n.directOnly?new Set([n.id]):folderDescendants(n.id)).has(new URLSearchParams(location.search).get('builderFolder'))):(Number(new URLSearchParams(location.search).get('folder'))||1)-1)),0);stage.dataset.ready='true';window.DSLibraryReady?.('drawer');stage.dataset.version='03nov-universal-drawers';stage.dataset.drawer=drawerID;
  const resumeKey='ds-drawer-refresh-'+drawerID;
  try{const saved=JSON.parse(sessionStorage.getItem(resumeKey)||'null');if(saved){sessionStorage.removeItem(resumeKey);const i=drawer.menu.indexOf(saved.group);if(i>=0){showCollection(i,saved.sub);scroll.scrollTop=saved.scroll;}}}catch{}
