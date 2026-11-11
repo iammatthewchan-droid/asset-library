@@ -9,7 +9,7 @@
   if(!config)return;
   const overview=document.body.dataset.view==='overview';
   const unit=Math.min(innerWidth/1920,innerHeight/1080);
-  const source=unit>=.97;
+  const source=unit>=.97||(overview&&(innerWidth>=1200||(innerWidth>=600&&innerWidth>innerHeight)));
   document.body.dataset.ownerMode=source?'source':'fluid';
   document.documentElement.style.setProperty('--owner-u',(source?unit:1)+'px');
   document.documentElement.style.setProperty('--owner-stage-width',source?1920*unit+'px':'100%');

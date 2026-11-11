@@ -1,0 +1,38 @@
+/* Source scene only: identical native geometry, scaled as one 1920 × 1080 composition. */
+body[data-owner-mode=source] header{position:relative;display:block;width:var(--owner-stage-width);height:calc(249.99 * var(--owner-u));min-height:0;padding:0;margin-inline:auto;border:0}
+body[data-owner-mode=source] .brand-home{position:absolute;left:calc(135.337 * var(--owner-u));top:calc(92.47 * var(--owner-u));width:calc(855.5 * var(--owner-u));height:calc(140.8 * var(--owner-u));max-width:none;transform:none;margin:0;display:block}
+body[data-owner-mode=source] .owner-header-art,body[data-owner-mode=source] .owner-heading-art,body[data-owner-mode=source] .owner-index-art{display:block;width:100%;height:auto;font-synthesis:none}
+body[data-owner-mode=source] header .edition{position:absolute;left:calc(1566.28 * var(--owner-u));top:calc(77.94 * var(--owner-u));font:400 calc(18.667 * var(--owner-u))/1.35 OwnerEdition61,Inter,sans-serif;letter-spacing:calc(1.85 * var(--owner-u));white-space:nowrap;color:#a5aab4}
+body[data-owner-mode=source][data-view=overview] .layout{width:var(--owner-stage-width);margin-inline:auto}
+body[data-owner-mode=source][data-view=overview] .layout main{padding:0;min-height:calc(830.01 * var(--owner-u))}
+body[data-owner-mode=source][data-view=overview] .intro{position:relative;top:0;display:block;height:calc(220 * var(--owner-u));min-height:0!important;margin:0;padding:0}
+body[data-owner-mode=source][data-view=overview] #title{position:absolute;left:calc(156.6396 * var(--owner-u));top:calc(70.01 * var(--owner-u));width:calc(680 * var(--owner-u));height:calc(82 * var(--owner-u));line-height:1;margin:0;transform:none}
+body[data-owner-mode=source][data-view=overview] .index-row{display:block;position:absolute;left:calc(156.6396 * var(--owner-u));top:calc(150.01 * var(--owner-u));width:calc(310 * var(--owner-u));height:calc(60 * var(--owner-u));min-height:0;margin:0}
+body[data-owner-mode=source][data-view=overview] .index-trigger{display:block;width:100%;padding:0;border:0;line-height:1;letter-spacing:normal}
+body[data-owner-mode=source][data-view=overview] .index-trigger::after{display:none}
+body[data-owner-mode=source][data-view=overview] #overview{padding:0;position:static}
+body[data-owner-mode=source][data-view=overview] .layout .grid.enamel-grid{position:absolute;inset:0;width:100%;height:calc(830.01 * var(--owner-u));min-height:0;display:block;margin:0!important;pointer-events:none}
+body[data-owner-mode=source][data-view=overview] .layout #grid .badge-drawer{position:absolute;left:calc(var(--owner-card-x) * var(--owner-u));top:calc(var(--owner-card-y) * var(--owner-u));width:calc(var(--owner-card-width) * var(--owner-u));max-width:none;pointer-events:auto}
+body[data-owner-mode=source] .badge-meta{display:none}
+body[data-owner-mode=source][data-view] .overview-utilities{position:absolute;left:calc(1319.14 * var(--owner-u));top:calc(144.5354 * var(--owner-u));right:auto;display:block;width:calc(482.013 * var(--owner-u));height:calc(64.316 * var(--owner-u));margin:0}
+body[data-owner-mode=source][data-view] .overview-utilities .library-account{display:flex;align-items:center;gap:12px;position:absolute;left:0;top:0;width:calc(202.891 * var(--owner-u));margin:0}
+body[data-owner-mode=source][data-view] .overview-utilities .utility-login{display:block;flex:none;border:0;background:transparent;color:#c4c9d2;width:100%;height:auto;padding:0}
+body[data-owner-mode=source][data-view] .overview-utilities .inventory{display:block;flex:none;position:absolute;left:calc(194.55 * var(--owner-u));top:0;width:calc(287.463 * var(--owner-u));margin:0;padding:0;min-width:0}
+body[data-owner-mode=source][data-view] .overview-utilities .library-account:has(.signed-name){font-size:max(14px,calc(14.454 * var(--owner-u)));flex-wrap:wrap;gap:5px;line-height:1.2}
+body[data-owner-mode=source][data-view] .overview-utilities .library-account:has(.signed-name) button{font-size:14px;padding:3px 5px}
+body[data-owner-mode=source][data-view=overview] .intro,body[data-owner-mode=source][data-view=overview] .index-row{z-index:2;pointer-events:none}
+body[data-owner-mode=source][data-view=overview] .index-trigger{pointer-events:auto}
+body[data-owner-mode=source][data-view=overview] .layout.index-open{grid-template-columns:var(--index-width) minmax(0,1fr)}
+body[data-owner-mode=source][data-view=overview]{min-height:calc(100dvh + 16px)}
+body[data-owner-mode=source][data-view=overview] .layout{min-height:calc(100dvh - 249.99 * var(--owner-u) + 16px)}
+body[data-owner-mode=source][data-view=overview] .layout>main>.library-toolbar,
+body[data-owner-mode=source][data-view=overview] .layout>main>.library-status,
+body[data-owner-mode=source][data-view=overview] .layout>main>.asset-workspace{display:none;margin:0}
+body[data-owner-mode=source][data-view=overview] .ambient-smoke{position:absolute!important;inset:0!important;width:100%!important;height:100%!important}
+body[data-owner-mode=source][data-view=overview] .ambient-smoke-layer{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;transform:none!important}
+
+body[data-owner-mode=source][data-view=overview] #title{width:calc(var(--owner-heading-width,680) * var(--owner-u))}
+/* The closed index must not impose its intrinsic height on the approved scene. */
+body[data-owner-mode=source][data-view=overview] .layout>aside{position:fixed;inset:0 auto 0 0;height:100dvh;overflow-y:auto;z-index:20}
+body[data-owner-mode=source][data-view=overview] .layout>main{grid-column:2}
+body[data-owner-mode=source][data-view=overview] .layout #grid .badge-drawer{scale:.9!important}
