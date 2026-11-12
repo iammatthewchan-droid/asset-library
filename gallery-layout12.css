@@ -546,3 +546,39 @@ body:has(.gallery-viewer[open]) { overflow: hidden; }
 }
 #layout-stage[data-gallery-wide][data-gallery-pdf] .gallery-pdf-panel { bottom:var(--gallery-scene-bottom); }
 #layout-stage[data-gallery-wide][data-gallery-pdf][data-gallery-actions] .gallery-pdf-panel { bottom: calc(var(--gallery-scene-bottom) + var(--gallery-dock-height) + var(--gallery-thumbnail-action-gap)); }
+
+/* Secondary controls share that same unit, including their labels and line weight. */
+#layout-stage[data-gallery-wide] .gallery-card .check-art { width:10%; height:10%; }
+#layout-stage[data-gallery-wide] .pdf-paged-tile .tile-image { height:calc(83.147% - 32 * var(--gallery-proportion-unit)); }
+#layout-stage[data-gallery-wide] .library-pdf-pages {
+  left:calc(4 * var(--gallery-proportion-unit)); right:calc(4 * var(--gallery-proportion-unit)); bottom:calc(4 * var(--gallery-proportion-unit));
+  height:calc(28 * var(--gallery-proportion-unit)); gap:calc(2 * var(--gallery-proportion-unit)); border-radius:calc(5 * var(--gallery-proportion-unit));
+  font-size:calc(14 * var(--gallery-proportion-unit));
+}
+#layout-stage[data-gallery-wide] .library-pdf-pages button {
+  width:calc(28 * var(--gallery-proportion-unit)); height:calc(28 * var(--gallery-proportion-unit));
+  border-width:calc(1 * var(--gallery-proportion-unit)); border-radius:calc(4 * var(--gallery-proportion-unit)); font-size:calc(24 * var(--gallery-proportion-unit));
+}
+#layout-stage[data-gallery-wide] #menu-art-overlay .menu-node path:not(.gallery-menu-lettering,.native-glare path),
+#layout-stage[data-gallery-wide] .gallery-pdf-rim path { stroke-width:calc(.65 * var(--gallery-proportion-unit)) !important; }
+body:has(#layout-stage[data-gallery-wide]) .gallery-viewer {
+  --viewer-control-size:calc(44 * var(--gallery-proportion-unit));
+  --viewer-caption-original-size:calc(17.28 * var(--gallery-proportion-unit));
+  --viewer-caption-original-line:calc(23.328 * var(--gallery-proportion-unit));
+  padding:calc(8 * var(--gallery-proportion-unit)) calc(12 * var(--gallery-proportion-unit)) calc(20 * var(--gallery-proportion-unit));
+}
+body:has(#layout-stage[data-gallery-wide]) .gallery-viewer-controls {
+  --viewer-control-size:calc(44 * var(--gallery-proportion-unit));
+  top:calc(128 * var(--gallery-proportion-unit));
+  right:calc(67.68 * var(--gallery-proportion-unit) + (var(--viewer-control-size) - var(--viewer-control-cell)) / 2);
+}
+body:has(#layout-stage[data-gallery-wide]) .gallery-viewer-caption {
+  font-size:calc(15.306667 * var(--gallery-proportion-unit));
+  bottom:calc(66.656 * var(--gallery-proportion-unit));
+}
+#layout-stage[data-gallery-wide] .gallery-toolbar { gap:calc(6 * var(--gallery-proportion-unit)) calc(12 * var(--gallery-proportion-unit)); }
+#layout-stage[data-gallery-wide] .asset-scroll[data-grouped] { --format-heading-gap:calc(14.4 * var(--gallery-proportion-unit)); }
+#layout-stage[data-gallery-wide] .asset-scroll[data-grouped] [data-family="2D"] .gallery-context { top:calc(6.48 * var(--gallery-proportion-unit)); }
+#layout-stage[data-gallery-wide] .asset-scroll[data-grouped] .asset-section + .asset-section { margin-top:calc(31.68 * var(--gallery-proportion-unit)); }
+#layout-stage[data-gallery-wide] .gallery-pdf-panel { border-radius:calc(24 * var(--gallery-proportion-unit)); }
+body:has(#layout-stage[data-gallery-wide]) .gallery-viewer-controls { --viewer-control-cell:calc(26 * var(--gallery-proportion-unit)); }

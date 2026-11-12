@@ -46,6 +46,7 @@
     function wideLayout() {
       stage.toggleAttribute('data-gallery-wide', wide.matches);
       stage.style.setProperty('--gallery-proportion-unit', Math.min(innerWidth / 1440, innerHeight / 900) + 'px');
+      document.documentElement.style.setProperty('--gallery-proportion-unit', Math.min(innerWidth / 1440, innerHeight / 900) + 'px');
       return wide.matches;
     }
 
