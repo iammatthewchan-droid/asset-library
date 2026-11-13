@@ -1,0 +1,28 @@
+/* Owner request 13 November: full-screen atmosphere; approved foreground stays fixed. */
+body[data-view=overview] { isolation:isolate; }
+body[data-owner-mode][data-view=overview] .layout { isolation:auto; overflow:visible; }
+body[data-owner-mode][data-view=overview] header { background:transparent; }
+body[data-owner-mode][data-view=overview] .ambient-smoke {
+  position:fixed !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100dvh !important;
+  z-index:-1;
+  pointer-events:none;
+}
+body[data-owner-mode][data-view=overview] .ambient-smoke-layer {
+  position:absolute !important;
+  inset:0 !important;
+  width:100% !important;
+  height:100% !important;
+  transform:none !important;
+}
+/* Inner drawers use the same viewport background boundary. */
+body:has(#layout-stage) { isolation:isolate; }
+#layout-stage { isolation:auto; }
+#layout-stage > .ambient-smoke-layer {
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100dvh;
+}
