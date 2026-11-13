@@ -60,7 +60,7 @@ function makePlaque(link,id){
  // Reuse the existing ambient renderer; static source plate remains the fallback.
  const ambient=H('div','ambient-smoke-layer');ambient.setAttribute('aria-hidden','true');stage.prepend(ambient);
  const syncAmbient=()=>{const ready=ambient.classList.contains('smoke-ready');stage.classList.toggle('ambient-ready',ready)};new MutationObserver(syncAmbient).observe(ambient,{attributes:true,attributeFilter:['class']});
- const galaxy=H('script');galaxy.src='/asset-library/asset-library-galaxy19.js?v=07nov-responsive-2';galaxy.onerror=()=>{ambient.remove();stage.classList.remove('ambient-ready')};document.body.append(galaxy);
+ const galaxy=H('script');galaxy.src='/asset-library/drawer-galaxy-calm13.js?v=13nov-calm-stars';galaxy.onerror=()=>{ambient.remove();stage.classList.remove('ambient-ready')};document.body.append(galaxy);
 
  const captionSource=nodes[54],tileSource=nodes[57].querySelector('[id^="Thumbnail-1_"]'),tilePaths=[...tileSource.children].filter(e=>e.tagName==='path');
  const tileRect=tilePaths[0].getBBox(),checkRect=tilePaths[1].getBBox();
