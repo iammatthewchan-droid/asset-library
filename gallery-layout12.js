@@ -186,6 +186,13 @@
       assets.forEach(asset => {
         const tile = makeTile(asset);
         const card = make('div', 'gallery-card');
+        if (asset.app_url) {
+          const open = make('a', 'tile-open-preview');
+          open.href = asset.app_url; open.target = '_blank'; open.rel = 'noopener noreferrer';
+          open.setAttribute('aria-label', 'Open ' + asset.filename);
+          tile.tabIndex = -1; tile.setAttribute('aria-hidden', 'true');
+          card.dataset.previewOnly = ''; card.append(tile, open); grid.append(card); return;
+        }
         tile.removeAttribute('aria-describedby');
         const open = make('button', 'tile-open-preview');
         open.type = 'button';
