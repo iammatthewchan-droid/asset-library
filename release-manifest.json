@@ -1,8 +1,8 @@
 {
   "release": "content-178",
-  "created": "2026-11-19T15:31:53.907460+00:00",
+  "created": "2026-11-19T15:34:26.685241+00:00",
   "catalog_revision": 178,
-  "entry_count": 83,
+  "entry_count": 84,
   "included_downloads": 83,
   "external_font_references": 2,
   "assets": [
@@ -1580,6 +1580,20 @@
       "access": "public",
       "editable_original": true,
       "approval": "Owner requested library inclusion; no new design approval inferred"
+    },
+    {
+      "id": "bubble-studio-3-app",
+      "title": "Bubble Studio 3.0",
+      "type": ".app",
+      "category": "Owner library",
+      "owner": "Matthew / DeepStack library",
+      "version": "178",
+      "preview": "/asset-library/thumbnails/bubble-studio-3-app.png",
+      "download": null,
+      "app_url": "https://deepstack-bubble-studio-3.vercel.app/",
+      "access": "public",
+      "editable_original": false,
+      "source_note": "Preserved existing public library entry"
     }
   ],
   "exclusions": [
