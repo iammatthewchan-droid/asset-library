@@ -1,8 +1,10 @@
 {
   "schema": 1,
-  "version": "7f2c4646e956a74338bb83e45dfa72b3f5ab4bb7044ba73fcaf7e04b115b666d",
-  "sourceVersion": "fa42f75649c75d875d980329809d99d5fdbcfd0693fcf8dcecfb04ec5d6d32b8",
-  "catalogRevision": 178,
-  "publishedAt": "2026-11-19T15:35:37.320874+00:00",
-  "changedFiles": []
+  "version": "a645a792617b970b6c2e520c592436fe83c1ce2cd1cedcbc01d99c55b201552c",
+  "sourceVersion": "6282ebf118a9ee147baa52bca416d49478984123102b518af14bb6d37543bd78",
+  "catalogRevision": 179,
+  "publishedAt": "2026-11-19T16:27:40.686850+00:00",
+  "changedFiles": [
+    "DS-OL-Portrait-Final.ai"
+  ]
 }

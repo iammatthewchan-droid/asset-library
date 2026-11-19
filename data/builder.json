@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "revision": 178,
+  "revision": 179,
   "prefix": "DS",
   "nodes": [
     {
@@ -1771,17 +1771,18 @@
       "name": "DS-OL-Portrait-Final",
       "dimension": "",
       "variant": "",
-      "width": 1125,
-      "height": 1222.48,
-      "page_count": 1,
+      "width": 0,
+      "height": 0,
       "alpha": false,
+      "alpha_range": null,
       "extension": ".ai",
       "mime": "application/postscript",
       "source_name": "DS-OL-Portrait-Final.ai",
-      "sha256": "8ed662c75c78a4e4f30168db3d6b19ed4650f5049a2de6337c47d38c3b435054",
-      "bytes": 1919061,
+      "sha256": "925c85120c5d9d44f95af0069395a38fb3f945ec02c6ddc14327423764371195",
+      "bytes": 2037631,
       "created": "2026-11-18T16:24:23.281039+08:00",
-      "updated": "2026-11-19T15:31:43+00:00",
+      "updated": "2026-11-19T16:27:34+00:00",
+      "page_count": null,
       "filename": "DS-OL-Portrait-Final.ai",
       "thumbnail_url": "/asset-library/thumbnails/9126c3b89f2c4119832ba4161968e9d0.png",
       "download_url": "/asset-library/downloads/9126c3b89f2c4119832ba4161968e9d0/DS-OL-Portrait-Final.ai"
