@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "revision": 177,
+  "revision": 178,
   "prefix": "DS",
   "nodes": [
     {
@@ -71,20 +71,20 @@
       "label": "Overlays"
     },
     {
-      "id": "234f532b39314a5b9b55f751610e54da",
-      "parent": "77550a8bb23a4532afe94605ad1ba092",
-      "name": "Assets",
-      "code": "Assets",
-      "mode": "shop",
-      "label": "Assets"
-    },
-    {
       "id": "3a59607e546e4538b4f02108dce12afa",
       "parent": "77550a8bb23a4532afe94605ad1ba092",
       "name": ".ai",
       "code": "AI",
       "mode": "shop",
       "label": ".ai"
+    },
+    {
+      "id": "234f532b39314a5b9b55f751610e54da",
+      "parent": "77550a8bb23a4532afe94605ad1ba092",
+      "name": "Assets",
+      "code": "Assets",
+      "mode": "shop",
+      "label": "Assets"
     },
     {
       "id": "af1cd41762074e339e3c76796436706c",
@@ -1781,7 +1781,7 @@
       "sha256": "8ed662c75c78a4e4f30168db3d6b19ed4650f5049a2de6337c47d38c3b435054",
       "bytes": 1919061,
       "created": "2026-11-18T16:24:23.281039+08:00",
-      "updated": "2026-11-18T16:24:23.281039+08:00",
+      "updated": "2026-11-19T15:31:43+00:00",
       "filename": "DS-OL-Portrait-Final.ai",
       "thumbnail_url": "/asset-library/thumbnails/9126c3b89f2c4119832ba4161968e9d0.png",
       "download_url": "/asset-library/downloads/9126c3b89f2c4119832ba4161968e9d0/DS-OL-Portrait-Final.ai"

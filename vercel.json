@@ -24,6 +24,15 @@
           "value": "no-store"
         }
       ]
+    },
+    {
+      "source": "/asset-library/data/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
     }
   ]
 }
