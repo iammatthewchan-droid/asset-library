@@ -14,5 +14,16 @@
       "destination": "/asset-library/next19.html?drawer=all",
       "permanent": false
     }
+  ],
+  "headers": [
+    {
+      "source": "/data/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "no-store"
+        }
+      ]
+    }
   ]
 }
