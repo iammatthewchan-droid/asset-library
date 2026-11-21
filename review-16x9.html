@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Asset Library — exact 16:9 review</title><style>html,body{width:100%;height:100%;margin:0;overflow:hidden;background:#08070c}iframe{position:fixed;display:block;border:0;width:1536px;height:864px;transform-origin:top left;background:#08070c}</style></head><body><iframe title="Asset Library — 1536 by 864 review" width="1536" height="864"></iframe><script>
+const frame=document.querySelector('iframe'),query=new URL(location).searchParams;
+const page=new URL('/asset-library/next19.html',location.origin);page.searchParams.set('drawer','all');page.searchParams.set('skin',query.get('skin')||'sky01');page.searchParams.set('review','restored-13nov-logic');frame.src=page.href;
+let frameWidth=1536,frameHeight=864;
+function fit(){const scale=Math.min(innerWidth/frameWidth,innerHeight/frameHeight);frame.style.width=frameWidth+'px';frame.style.height=frameHeight+'px';frame.style.transform='scale('+scale+')';frame.style.left=(innerWidth-frameWidth*scale)/2+'px';frame.style.top=(innerHeight-frameHeight*scale)/2+'px'}
+function verify(attempt=0){const w=frame.contentWindow.innerWidth,h=frame.contentWindow.innerHeight;frame.dataset.verifiedViewport=w+'x'+h;if((w!==1536||h!==864)&&attempt<4){frameWidth+=1536-w;frameHeight+=864-h;fit();requestAnimationFrame(()=>verify(attempt+1))}}
+frame.addEventListener('load',()=>requestAnimationFrame(()=>verify()));
+addEventListener('resize',fit);fit();
+</script></body></html>

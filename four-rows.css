@@ -1,0 +1,63 @@
+/* Four visible landscape rows. Categories continue in the same native grid. */
+@media (min-width:600px) {
+  body[data-four-row-layout][data-view=overview] {
+    --home-scene-height:calc(1080 * var(--owner-u));
+    --home-scene-top:calc((100dvh - var(--home-scene-height)) / 2);
+  }
+  body[data-four-row-layout][data-view=overview] header { top:var(--home-scene-top)!important; }
+  body[data-four-row-layout][data-view=overview] .intro { top:var(--home-scene-top)!important; }
+  body[data-four-row-layout][data-view=overview] { height:100dvh; min-height:0!important; overflow:hidden; }
+  body[data-four-row-layout][data-view=overview] .layout main { min-height:0!important; }
+  body[data-four-row-layout][data-view=overview] .layout,
+  body[data-four-row-layout][data-view=overview] .layout.index-open { grid-template-columns:0 minmax(0,1fr)!important; }
+  body[data-four-row-layout][data-view=overview] .layout>main,
+  body[data-four-row-layout][data-view=overview] .layout.index-open>main { transform:none!important; }
+  body[data-four-row-layout][data-view=overview] .layout>aside {
+    position:fixed!important;left:var(--compact-home-offset)!important;right:auto!important;
+    top:var(--home-menu-top,calc(var(--home-scene-top) + 220 * var(--owner-u)))!important;
+    bottom:calc(var(--home-scene-top) + 75 * var(--owner-u))!important;height:auto!important;
+    padding:calc(16 * var(--owner-u)) calc(20 * var(--owner-u))!important;
+    overflow-y:auto!important;z-index:75!important;background:var(--skin-base,#080808)!important;
+  }
+  body[data-four-row-layout][data-view=overview] #title,
+  body[data-four-row-layout][data-view=overview] .index-row { left:calc(135.337 * var(--owner-u))!important; }
+  body[data-four-row-layout][data-view=overview] #grid .badge-title-svg { font-size:var(--drawer-title-size,79.790697px)!important; stroke:currentColor; color:#fff; stroke-width:2.1; paint-order:stroke fill; }
+  body[data-four-row-layout][data-view=overview] #title { top:0!important; scale:.8; transform-origin:left top; }
+  /* Owner: remove the extra overlaid index wording; native masthead is retained. */
+  body[data-four-row-layout][data-view=overview] .index-row { display:none!important; }
+  body[data-four-row-layout][data-view=overview] .overview-utilities { top:calc(204 * var(--owner-u))!important; transform:translateY(var(--home-cluster-lift,0px)); }
+  body[data-four-row-layout][data-view=overview] .category-scroll {
+    --category-top:calc(290 * var(--owner-u));
+    --category-bottom:calc(28 * var(--owner-u));
+    --category-pad:calc(20 * var(--owner-u));
+    --category-height:calc(var(--home-scene-height) - var(--category-top) - var(--category-bottom));
+    /*185.5 is the approved1536x864 row pitch expressed in the1920-unit scene. */
+    --category-row:var(--home-row-step,calc(185.5 * var(--owner-u)));
+    position:fixed; top:var(--home-grid-top,calc(var(--home-scene-top) + var(--category-top) - 24 * var(--owner-u) + var(--home-cluster-lift,0px))); bottom:var(--home-grid-bottom,calc(var(--home-scene-top) + var(--category-bottom) - var(--home-cluster-lift,0px)));
+    left:calc((100vw - 1920 * var(--owner-u)) / 2); width:calc(1920 * var(--owner-u));
+    overflow-x:hidden; overflow-y:auto; background:transparent; border:0; outline:0;
+    -webkit-overflow-scrolling:touch; overscroll-behavior-y:contain;
+    scroll-snap-type:y proximity; scroll-padding-top:calc(var(--category-pad) + 24 * var(--owner-u)); scroll-padding-bottom:var(--category-pad);
+    scrollbar-width:none; touch-action:pan-y;
+  }
+  .category-scroll::-webkit-scrollbar { display:none; }
+  body[data-four-row-layout][data-view=overview] .layout #grid {
+    box-sizing:border-box; position:relative!important; inset:auto!important; translate:none!important;
+    width:100%!important; height:auto!important; min-height:100%; margin:0!important;
+    display:grid!important; grid-template-columns:repeat(4,calc(344 * var(--owner-u)))!important;
+    grid-template-rows:none!important; grid-auto-rows:var(--category-row)!important;
+    /* Equal visible margins: native rim begins at129.5 and wing ends at1248 in the1150-unit SVG viewBox. */
+    /* Keep both outer visible margins while the upper wings gain149.6SVG units. */
+    gap:0 calc(92.009933 * var(--owner-u))!important;
+    padding:var(--home-grid-pad-top,calc(var(--category-pad) + 24 * var(--owner-u))) 0 0 calc(131.298739 * var(--owner-u));
+    align-content:start; align-items:start; pointer-events:auto;
+  }
+  body[data-four-row-layout][data-view=overview] .layout #grid .badge-drawer {
+    position:relative!important; inset:auto!important; width:calc(344 * var(--owner-u))!important;
+    max-width:none; justify-self:start; margin:0; align-self:start;
+  }
+  #grid .badge-drawer:nth-child(4n+1) { scroll-snap-align:start; }
+  #grid .category-slot { cursor:default; }
+  #grid .category-slot .badge-glare { display:none; }
+  #grid .badge-art,#grid .badge-face { overflow:visible!important; }
+}

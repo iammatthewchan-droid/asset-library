@@ -1,0 +1,103 @@
+/* Owner-requested compact header. Native type, controls and artwork retained. */
+:root { --compact-masthead-scale:.5; }
+.shared-masthead-art { display:none!important; }
+@media (min-width: 600px) {
+  [data-proportional-masthead="true"] .owner-header-art>path { stroke-width:2.27261; }
+  /* Align the title to the visible DEEPSTACK wordmark baseline within the native SVG. */
+  [data-proportional-masthead="true"] .owner-header-art text[data-owner-caption] { transform:translateY(2.5px); }
+  [data-proportional-masthead="true"] { scale:var(--compact-masthead-scale)!important; transform-origin:left top!important; }
+  body[data-owner-mode=source][data-view=overview] header { height:calc(145 * var(--owner-u))!important; }
+  body[data-owner-mode=source][data-view=overview] .brand-home { top:calc(42 * var(--owner-u))!important; }
+  body[data-owner-mode=source][data-view=overview] header .edition { top:calc(42 * var(--owner-u))!important; }
+  body[data-owner-mode=source][data-view=overview] .overview-utilities { top:calc(80 * var(--owner-u))!important; }
+  body[data-owner-mode=source][data-view=overview] #title { top:calc(16 * var(--owner-u))!important; }
+  body[data-owner-mode=source][data-view=overview] .index-row { top:calc(96 * var(--owner-u))!important; }
+  body[data-owner-mode=source][data-view=overview] #grid { translate:0 calc(-56 * var(--owner-u)); }
+  #layout-stage[data-gallery-wide] .landscape-masthead[data-home-masthead] {
+    position:fixed!important; left:calc(var(--compact-home-offset) + 135.337 * var(--compact-home-unit))!important;
+    top:calc(42 * var(--compact-home-unit))!important;
+    width:calc(855.5 * var(--compact-home-unit))!important; height:calc(140.8 * var(--compact-home-unit))!important;
+    max-width:none!important; margin:0!important; display:block!important;
+  }
+  #layout-stage[data-gallery-wide] .landscape-masthead[data-home-masthead] > svg:not(.shared-masthead-art) { display:none!important; }
+  #layout-stage[data-gallery-wide] .shared-masthead-art { display:block!important; width:100%!important; height:auto!important; max-width:none!important; }
+  #layout-stage[data-gallery-wide] .mobile-library-header > div {
+    display:block!important; position:fixed; left:calc(var(--compact-home-offset) + 135.337 * var(--compact-home-unit)); top:calc(128 * var(--compact-home-unit));
+    font:700 calc(25 * var(--compact-home-unit))/1.2 Inter,Arial,sans-serif; color:#f1f2f4;
+  }
+  #layout-stage[data-gallery-wide] { --masthead-top:calc(20 * var(--gallery-proportion-unit))!important; --tile-top:calc(166 * var(--gallery-proportion-unit))!important; }
+  #layout-stage[data-gallery-wide] #menu-art-overlay,
+  #layout-stage[data-gallery-wide] .menu-hit[data-menu-tier],
+  #layout-stage[data-gallery-wide] .menu-corridor { translate:0 calc(-140 * var(--gallery-proportion-unit)); }
+}
+
+@media (min-width:600px) {
+  /* Real alpha masks reveal the same continuous background; no black rectangle. */
+  [data-scroll-feather="true"] {
+    --scroll-feather-mask:linear-gradient(to bottom,
+      transparent 0,
+      rgba(0,0,0,.12) calc(var(--scroll-top-feather) * .25),
+      rgba(0,0,0,.55) calc(var(--scroll-top-feather) * .6),
+      #000 var(--scroll-top-feather),
+      #000 calc(100% - var(--scroll-bottom-feather)),
+      rgba(0,0,0,.55) calc(100% - var(--scroll-bottom-feather) * .6),
+      rgba(0,0,0,.12) calc(100% - var(--scroll-bottom-feather) * .25),
+      transparent 100%);
+    -webkit-mask-image:var(--scroll-feather-mask);mask-image:var(--scroll-feather-mask);
+    -webkit-mask-size:100% 100%;mask-size:100% 100%;
+    -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  }
+  .ambient-smoke-layer {
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.35) calc(var(--scene-feather-end,220px) * .4),#000 var(--scene-feather-end,220px),#000 100%);
+    mask-image:linear-gradient(to bottom,transparent 0,rgba(0,0,0,.35) calc(var(--scene-feather-end,220px) * .4),#000 var(--scene-feather-end,220px),#000 100%);
+  }
+}
+
+/* A shared contain unit scales the foreground; viewport height only extends scrolling. */
+@media (min-width:600px) {
+  #layout-stage[data-gallery-wide] {
+    --gallery-proportion-unit:calc(1.2 * var(--compact-home-unit))!important;
+    top:0!important; height:100dvh!important;
+  }
+  #layout-stage[data-gallery-wide] .gallery-action-dock {
+    bottom:max(env(safe-area-inset-bottom),calc(45 * var(--gallery-proportion-unit)))!important;
+  }
+  #layout-stage[data-gallery-wide] .mobile-library-header > div[data-compact-heading="brand-identity"] {
+    /* Four CSS points larger at the1536x864 review reference; scales as one unit. */
+    font-size:calc(31.6666667 * var(--compact-home-unit));
+  }
+}
+
+/* Owner15Nov: +300% symbol size (4x), with usable touch targets. */
+.gallery-viewer-controls { --viewer-control-cell:max(44px,calc(var(--viewer-control-size) * 1.25))!important; gap:0!important; right:max(12px,4.7vw,env(safe-area-inset-right))!important; }
+.gallery-viewer-controls button { width:var(--viewer-control-cell)!important; height:var(--viewer-control-cell)!important; min-width:44px; min-height:44px; }
+.gallery-viewer-controls svg { width:calc(var(--viewer-control-size) * 1.008)!important; height:calc(var(--viewer-control-size) * 1.008)!important; }
+@media (min-width:600px) {
+  body:has(#layout-stage[data-gallery-wide]) .gallery-viewer,
+  body:has(#layout-stage[data-gallery-wide]) .gallery-viewer-controls { --viewer-control-size:calc(52.8 * var(--compact-home-unit)); }
+}
+
+/* Owner16Nov: one page-heading role and the homepage's masthead clearance.
+ * The native home heading renders at50.2248155 * contain-unit screen pixels.
+ * Inner section captions remain subordinate below this shared title row.
+ */
+:root { --library-page-heading-reference:50.2248155; }
+@media (min-width:600px) {
+  #layout-stage[data-gallery-wide] .mobile-library-header > div[data-compact-heading] {
+    top:calc(147.77395 * var(--compact-home-unit))!important;
+    font:700 calc(var(--library-page-heading-reference) * var(--compact-home-unit))/1.2 Inter,Arial,sans-serif!important;
+    white-space:nowrap;
+  }
+  #layout-stage[data-gallery-wide] { --tile-top:calc(272 * var(--gallery-proportion-unit))!important; }
+  #layout-stage[data-gallery-wide] #menu-art-overlay,
+  #layout-stage[data-gallery-wide] .menu-hit[data-menu-tier],
+  #layout-stage[data-gallery-wide] .menu-corridor { translate:0 calc(-34 * var(--gallery-proportion-unit)); }
+}
+
+@media(min-width:600px){
+  #layout-stage[data-gallery-wide] .drawer-folder-label18{display:inline-block;margin-left:calc(30 * var(--compact-home-unit));font-size:.8em;font-weight:400;line-height:1;vertical-align:baseline;color:#d2cfd7}
+  #layout-stage[data-gallery-wide] .drawer-folder-label18[hidden]{display:none}
+  #layout-stage[data-gallery-wide] .family-title[data-heading-suffix],
+  #layout-stage[data-gallery-wide] .asset-count{visibility:hidden}
+  #layout-stage[data-gallery-wide] .drawer-item-total18{position:fixed;z-index:7;font:400 calc(18 * var(--compact-home-unit))/1.2 Inter,Arial,sans-serif;color:#c8c6ce;white-space:nowrap;pointer-events:none}
+}

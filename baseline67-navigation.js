@@ -33,6 +33,8 @@
  // Use the actual empty gutter, with no visual overlay or change to layout.
  document.addEventListener('pointermove',e=>{
   if(!hover())return;
+  // The style controller and its lower approach lane are independent of the index gutter.
+  if(window.DSStyleControls?.protects(e.clientX,e.clientY)){if(opened)setOpen(false);return;}
   const gutterRight=Math.max(24,document.getElementById('title').getBoundingClientRect().left);
   if(e.clientX>=0&&e.clientX<gutterRight){if(!opened)setOpen(true);else{clearTimeout(closeTimer);closeTimer=null;}return;}
   if(!opened)return;

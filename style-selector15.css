@@ -1,0 +1,9 @@
+/* Owner15Nov: blue sky, purple metallic, black metal review selectors. */
+.ds-style-selector{position:fixed!important;left:var(--style-selector-left,24px)!important;right:auto!important;top:var(--style-selector-top,auto)!important;bottom:var(--style-selector-bottom,24px)!important;display:flex!important;gap:calc(8 * var(--compact-home-unit,1px))!important;align-items:center!important;z-index:80!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;opacity:0;pointer-events:none}
+.ds-style-selector[data-positioned=true]{opacity:1;pointer-events:auto}
+.ds-style-selector button{display:grid!important;place-items:center!important;box-sizing:border-box!important;width:max(28px,calc(36 * var(--compact-home-unit,1px)))!important;height:max(28px,calc(36 * var(--compact-home-unit,1px)))!important;min-width:0!important;min-height:0!important;margin:0!important;padding:0!important;border:0!important;border-radius:50%!important;background:transparent!important;box-shadow:none!important;cursor:pointer!important;transform:none!important;clip-path:none!important}
+.ds-style-selector button::before,.ds-style-selector button::after{display:none!important}
+.ds-style-selector .style-dot{display:block;width:max(12px,calc(18 * var(--compact-home-unit,1px)));height:max(12px,calc(18 * var(--compact-home-unit,1px)));border:1px solid #6b6573;border-radius:50%;background:var(--style-dot-color);box-sizing:border-box}
+.ds-style-selector button[aria-pressed=true] .style-dot{border-width:2px;border-color:#898391;outline:none;box-shadow:none}
+.ds-style-selector button:hover .style-dot{border-color:#96909d;filter:none}
+.ds-style-selector button:focus-visible{outline:1px solid #898391!important;outline-offset:2px}

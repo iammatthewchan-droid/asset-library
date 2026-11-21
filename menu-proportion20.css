@@ -1,0 +1,25 @@
+/* Scoped navigation correction. Native scene geometry and effects are unchanged. */
+body .layout,body .layout.index-open{grid-template-columns:0 minmax(0,1fr)!important}
+body .layout>main,body .layout.index-open>main{grid-column:2!important;width:100%!important}
+html body .layout>aside#library-index-panel,html body #drawer-library-index{
+ --ds-index-unit:1px;box-sizing:border-box!important;position:fixed!important;
+ inset:0 auto 0 0!important;height:100dvh!important;max-height:100dvh!important;
+ width:var(--ds-index-width,256px)!important;min-width:0!important;max-width:100vw!important;
+ padding:var(--ds-index-top,20px) calc(16 * var(--ds-index-unit)) calc(16 * var(--ds-index-unit))!important;
+ overflow-y:auto!important;overflow-x:hidden!important;overscroll-behavior:contain;
+ background:var(--skin-base,rgba(11,11,13,.97));z-index:100!important;flex-direction:column!important;
+}
+html body .layout>aside#library-index-panel #nav,html body #drawer-library-index nav{display:grid!important;gap:0!important;margin:0!important;padding:0!important;flex:0 0 auto}
+body .layout #nav a,html body #drawer-library-index nav a{
+ box-sizing:border-box!important;display:flex!important;align-items:center!important;
+ gap:calc(10 * var(--ds-index-unit))!important;padding:calc(9 * var(--ds-index-unit)) calc(4 * var(--ds-index-unit))!important;
+ font-size:var(--ds-index-font,18px)!important;line-height:1.35!important;letter-spacing:normal!important;
+ white-space:nowrap!important;min-width:0!important;margin:0!important;flex:0 0 auto;
+}
+body .layout #nav a span,html body #drawer-library-index nav a span{
+ font-size:inherit!important;line-height:inherit!important;min-width:calc(22 * var(--ds-index-unit))!important;flex:0 0 auto;
+}
+body .layout #nav a[data-category=all],html body #drawer-library-index nav a[data-category=all]{font-size:var(--ds-index-heading,22px)!important;font-weight:700!important}
+html body .layout>aside#library-index-panel .side-note{margin:calc(18 * var(--ds-index-unit)) calc(4 * var(--ds-index-unit)) 0!important;padding:0!important;flex:0 0 auto}
+html body .layout>aside#library-index-panel .copyright,html body .layout>aside#library-index-panel .copyright a{font-size:var(--ds-index-small,12px)!important;line-height:1.4!important}
+html body .layout>aside#library-index-panel .motion-space{display:none!important}
