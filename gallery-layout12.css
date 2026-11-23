@@ -181,6 +181,11 @@ body:has(#layout-stage[data-gallery-wide]) { display: block; overflow: hidden; }
 #layout-stage[data-gallery-wide] .landscape-masthead svg > [data-native-index="5"] { display: none; }
 
 #layout-stage[data-gallery-wide] .mobile-library-nav { display: contents; }
+/* Owner hard lock: the first menu button and first asset row share one top edge.
+   Shift the native artwork, hit targets, and submenu corridors together. */
+#layout-stage[data-gallery-wide] :is(#menu-art-overlay, .menu-hit[data-menu-tier], .menu-corridor) {
+  translate: 0 var(--tile-top);
+}
 #layout-stage[data-gallery-wide] #menu-art-overlay { opacity: 1 !important; visibility: visible !important; height: 100%; }
 #layout-stage[data-gallery-wide] #menu-art-overlay .gallery-menu-lettering { visibility: hidden !important; }
 #layout-stage[data-gallery-wide] #menu-art-overlay .menu-node path:not(.gallery-menu-lettering, .native-glare path) {

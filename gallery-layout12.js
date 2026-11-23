@@ -238,13 +238,13 @@
     function projectMenu(logo, overlay, assembly) {
       const {width, height} = stage.getBoundingClientRect();
       const x = width * .027;
-      const y = height * .34;
-      const scale = Math.min(width * .132 / logo.w, (height - y - 15) / 390);
+      // Retain the menu's existing size limit. CSS places its origin at the first asset row.
+      const scale = Math.min(width * .132 / logo.w, (height * .66 - 15) / 390);
       overlay.setAttribute('viewBox', `0 0 ${width} ${height}`);
-      assembly.setAttribute('transform', `translate(${x} ${y}) scale(${scale}) translate(${-logo.x} ${-logo.y})`);
+      assembly.setAttribute('transform', `translate(${x} 0) scale(${scale}) translate(${-logo.x} ${-logo.y})`);
       const project = box => ({
         left: x + (box.x - logo.x) * scale,
-        top: y + (box.y - logo.y) * scale,
+        top: (box.y - logo.y) * scale,
         width: box.w * scale,
         height: box.h * scale,
       });
