@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "revision": 184,
+  "revision": 185,
   "prefix": "DS",
   "nodes": [
     {
@@ -1836,6 +1836,49 @@
       "filename": "DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf",
       "thumbnail_url": "/asset-library/thumbnails/8ae9b22566974ec49f431970c307e210.png",
       "download_url": "/asset-library/downloads/8ae9b22566974ec49f431970c307e210/DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf"
+    },
+    {
+      "id": "d8a560727f70406d9ca1f23eeece2e34",
+      "folder": "cb52e6c46e204416932c453c601ffa99",
+      "name": "Poker-Tees-On-Model",
+      "dimension": "",
+      "variant": "",
+      "width": 960,
+      "height": 540,
+      "page_count": 32,
+      "alpha": false,
+      "alpha_range": null,
+      "extension": ".pdf",
+      "mime": "application/pdf",
+      "source_name": "DEEPSTACK-Poker-Tees-On-Model.pdf",
+      "sha256": "a269eafe2a630a8f7275adb1ce5c7ecacb1ec79201388125e840921c7e7874d8",
+      "bytes": 47446035,
+      "created": "2026-11-23T20:47:02+00:00",
+      "filename": "DEEPSTACK-Poker-Tees-On-Model.pdf",
+      "thumbnail_url": "/asset-library/thumbnails/d8a560727f70406d9ca1f23eeece2e34.png",
+      "download_url": "/asset-library/downloads/d8a560727f70406d9ca1f23eeece2e34/DEEPSTACK-Poker-Tees-On-Model.pdf"
+    },
+    {
+      "id": "690572b1e99e4b5b8fece72ad5586839",
+      "folder": "bbd97a8f7fc84e8faa81f2305598d96c",
+      "name": "Poker-Tees-On-Model",
+      "dimension": "",
+      "variant": "",
+      "width": 960,
+      "height": 540,
+      "page_count": 32,
+      "alpha": false,
+      "alpha_range": null,
+      "extension": ".pdf",
+      "mime": "application/pdf",
+      "source_name": "DEEPSTACK-Poker-Tees-On-Model.pdf",
+      "sha256": "a269eafe2a630a8f7275adb1ce5c7ecacb1ec79201388125e840921c7e7874d8",
+      "bytes": 47446035,
+      "created": "2026-11-23T20:47:02+00:00",
+      "updated": "2026-11-23T20:47:02+00:00",
+      "filename": "DEEPSTACK-Poker-Tees-On-Model.pdf",
+      "thumbnail_url": "/asset-library/thumbnails/690572b1e99e4b5b8fece72ad5586839.png",
+      "download_url": "/asset-library/downloads/690572b1e99e4b5b8fece72ad5586839/DEEPSTACK-Poker-Tees-On-Model.pdf"
     }
   ]
 }
