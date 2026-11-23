@@ -1,9 +1,9 @@
 {
   "schema": 1,
-  "version": "61dae7693c7c0a3c21e054143bf915f1f89c9bcedd52008d7e74c38457e5d137",
-  "sourceVersion": "98b651cf69eb3ede4d446505aa5844b1a9ec5144eb52dee8e0815b22d5504e59",
-  "catalogRevision": 182,
-  "publishedAt": "2026-11-19T16:59:43.052239+00:00",
+  "version": "edd98bc1b01dc1847d36e90cf9f108a59b7ef61d1b41a913969a4a9e398519e0",
+  "sourceVersion": "0f6a1385fb35f463461f0a2578cb6a7567eacfbd847f4c75460087fd90ba7951",
+  "catalogRevision": 183,
+  "publishedAt": "2026-11-23T17:40:21.185752+00:00",
   "changedFiles": [
     "DS-OL-Portrait-Final.ai"
   ]
