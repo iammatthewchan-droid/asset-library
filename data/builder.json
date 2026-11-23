@@ -1,6 +1,6 @@
 {
   "schema": 1,
-  "revision": 183,
+  "revision": 184,
   "prefix": "DS",
   "nodes": [
     {
@@ -365,6 +365,14 @@
       "code": "Logo",
       "mode": "shop",
       "label": "Logo"
+    },
+    {
+      "id": "bbd97a8f7fc84e8faa81f2305598d96c",
+      "parent": "25b8ab7ecda54514b2de22b2a0e69df6",
+      "name": "PDF",
+      "code": "PDF",
+      "mode": "shop",
+      "label": "PDF"
     },
     {
       "id": "overlays-app",
@@ -1786,6 +1794,48 @@
       "filename": "DS-OL-Portrait-Final.ai",
       "thumbnail_url": "/asset-library/thumbnails/9126c3b89f2c4119832ba4161968e9d0.png",
       "download_url": "/asset-library/downloads/9126c3b89f2c4119832ba4161968e9d0/DS-OL-Portrait-Final.ai"
+    },
+    {
+      "id": "3917561b37394ad3b9add904a013a6cc",
+      "folder": "cb52e6c46e204416932c453c601ffa99",
+      "name": "Poker-Tees-Design-Review",
+      "dimension": "",
+      "variant": "",
+      "width": 960,
+      "height": 540,
+      "page_count": 32,
+      "alpha": false,
+      "alpha_range": null,
+      "extension": ".pdf",
+      "mime": "application/pdf",
+      "source_name": "DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf",
+      "sha256": "975ac10e30a35c57d2cc50f761673db62bca569f7e6662536b078b29d6ee1964",
+      "bytes": 35619118,
+      "created": "2026-11-23T18:01:11+00:00",
+      "filename": "DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf",
+      "thumbnail_url": "/asset-library/thumbnails/3917561b37394ad3b9add904a013a6cc.png",
+      "download_url": "/asset-library/downloads/3917561b37394ad3b9add904a013a6cc/DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf"
+    },
+    {
+      "id": "8ae9b22566974ec49f431970c307e210",
+      "folder": "bbd97a8f7fc84e8faa81f2305598d96c",
+      "name": "Poker-Tees-Design-Review",
+      "dimension": "",
+      "variant": "",
+      "width": 960,
+      "height": 540,
+      "page_count": 32,
+      "alpha": false,
+      "alpha_range": null,
+      "extension": ".pdf",
+      "mime": "application/pdf",
+      "source_name": "DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf",
+      "sha256": "975ac10e30a35c57d2cc50f761673db62bca569f7e6662536b078b29d6ee1964",
+      "bytes": 35619118,
+      "created": "2026-11-23T18:01:11+00:00",
+      "filename": "DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf",
+      "thumbnail_url": "/asset-library/thumbnails/8ae9b22566974ec49f431970c307e210.png",
+      "download_url": "/asset-library/downloads/8ae9b22566974ec49f431970c307e210/DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf"
     }
   ]
 }

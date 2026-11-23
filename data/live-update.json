@@ -1,10 +1,11 @@
 {
   "schema": 1,
-  "version": "edd98bc1b01dc1847d36e90cf9f108a59b7ef61d1b41a913969a4a9e398519e0",
-  "sourceVersion": "0f6a1385fb35f463461f0a2578cb6a7567eacfbd847f4c75460087fd90ba7951",
-  "catalogRevision": 183,
-  "publishedAt": "2026-11-23T17:40:21.185752+00:00",
+  "version": "09a2f730e0dede1c68883ef24b553bcc80e6d9e38a2d6a91fc460f507b846ac1",
+  "sourceVersion": "26f68c144ca470e2b488ff33d3c87aae571b9e5315775b081e7637c3575ef2f2",
+  "catalogRevision": 184,
+  "publishedAt": "2026-11-23T18:01:35.644070+00:00",
   "changedFiles": [
-    "DS-OL-Portrait-Final.ai"
+    "DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf",
+    "DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf"
   ]
 }
