@@ -1,16 +1,18 @@
 {
   "schema": 1,
-  "version": "85969b57575d7bb4605ba5d7a4ac9b98fc18138254750eb4cb2afc1a302ad476",
-  "sourceVersion": "3fba6f19e7a83269544167cfbbb9dda4d497bd3917309dfdfb2bdfd3b35cedac",
-  "catalogRevision": 185,
-  "publishedAt": "2026-11-25T13:05:57.089848+00:00",
+  "version": "135211aaff3775ec1ef05ca04ff7b0fe6e70bf591faf8a69c9d37c50272038b0",
+  "sourceVersion": "0f517f049ebb37fa338b52cd540b7e1463e959e9a177af33ff5f9ba024fbc1c2",
+  "catalogRevision": 186,
+  "publishedAt": "2026-11-25T13:54:30.353695+00:00",
   "changedFiles": [
-    "DS-AL-3D-JustLogo-Square-600.png",
-    "DS-AL-3D-Signature-Ver-Square-600.png",
-    "DS-AL-3D-Signature-Hor-Square-600.png",
-    "DS-AL-3D-Signature-Chi-Ver-Square-600.png",
-    "DS-AL-3D-Signature-Chi-Hor-Square-600.png",
-    "DS-AL-3D-Signature-Full-Ver-Square-600.png",
-    "DS-AL-3D-Signature-Full-Hor-Square-600.png"
+    "DS-PDF-Design-Progress-DS-Overlays-IG2.pdf",
+    "DS-PDF-Design-Progress-DS-TaglineExplorations.pdf",
+    "DS-spatial-design-London-London-Lounge-Design.pdf",
+    "DS-PDF-Design-Progress-London-Lounge-Design.pdf",
+    "DS-BI-Color-download-1920x1080.png",
+    "DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf",
+    "DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf",
+    "DEEPSTACK-Poker-Tees-On-Model.pdf",
+    "DEEPSTACK-Poker-Tees-On-Model.pdf"
   ]
 }
