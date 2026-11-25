@@ -1,11 +1,16 @@
 {
   "schema": 1,
-  "version": "ff597118fded4403a52801e718691d63dc0697e1ce704e4d67ec3b4b5168b4cb",
+  "version": "85969b57575d7bb4605ba5d7a4ac9b98fc18138254750eb4cb2afc1a302ad476",
   "sourceVersion": "3fba6f19e7a83269544167cfbbb9dda4d497bd3917309dfdfb2bdfd3b35cedac",
   "catalogRevision": 185,
-  "publishedAt": "2026-11-23T20:47:08.919420+00:00",
+  "publishedAt": "2026-11-25T13:05:57.089848+00:00",
   "changedFiles": [
-    "DEEPSTACK-Poker-Tees-On-Model.pdf",
-    "DEEPSTACK-Poker-Tees-On-Model.pdf"
+    "DS-AL-3D-JustLogo-Square-600.png",
+    "DS-AL-3D-Signature-Ver-Square-600.png",
+    "DS-AL-3D-Signature-Hor-Square-600.png",
+    "DS-AL-3D-Signature-Chi-Ver-Square-600.png",
+    "DS-AL-3D-Signature-Chi-Hor-Square-600.png",
+    "DS-AL-3D-Signature-Full-Ver-Square-600.png",
+    "DS-AL-3D-Signature-Full-Hor-Square-600.png"
   ]
 }
