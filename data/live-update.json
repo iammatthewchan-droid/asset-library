@@ -1,18 +1,13 @@
 {
   "schema": 1,
-  "version": "135211aaff3775ec1ef05ca04ff7b0fe6e70bf591faf8a69c9d37c50272038b0",
-  "sourceVersion": "0f517f049ebb37fa338b52cd540b7e1463e959e9a177af33ff5f9ba024fbc1c2",
-  "catalogRevision": 186,
-  "publishedAt": "2026-11-25T13:54:30.353695+00:00",
+  "version": "1eddb2fe7093bd150dba06b2c600199c33b6c82bac11fc68b4aa143ed441bc10",
+  "sourceVersion": "21774012152dcf22701243d1831e2f8ff989b151059194933bab74c8f7a99dbd",
+  "catalogRevision": 187,
+  "publishedAt": "2026-11-25T13:58:31.317783+00:00",
   "changedFiles": [
-    "DS-PDF-Design-Progress-DS-Overlays-IG2.pdf",
-    "DS-PDF-Design-Progress-DS-TaglineExplorations.pdf",
-    "DS-spatial-design-London-London-Lounge-Design.pdf",
-    "DS-PDF-Design-Progress-London-Lounge-Design.pdf",
-    "DS-BI-Color-download-1920x1080.png",
-    "DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf",
-    "DEEPSTACK-Poker-Tees-Design-Review-Color-Matched.pdf",
-    "DEEPSTACK-Poker-Tees-On-Model.pdf",
-    "DEEPSTACK-Poker-Tees-On-Model.pdf"
+    "DS-for-the-table-Jeju-Felt-DS-JejuFelt.ai",
+    "DS-spatial-design-London-Menu-DS-LondonAllDayMenu.ai",
+    "DS-spatial-design-London-Menu-DS-LondonAllDayMenuNP-Recovered.ai",
+    "DS-spatial-design-London-Menu-DS-LondonAllDayMenuNP.ai"
   ]
 }
