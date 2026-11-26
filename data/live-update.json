@@ -1,19 +1,10 @@
 {
   "schema": 1,
-  "version": "69de4751afb6b5a70b8322589b6c60e7788015fad6c991e9564a890e32f112de",
+  "version": "984f722430cfd125a90f3bc1b196ed2356f22e4852fc01adfe18e605029b38be",
   "sourceVersion": "d0c039ca7789485df24f6aabbf0ca3f43b049cb0a6063276d36ab4ef1636002f",
   "catalogRevision": 188,
-  "publishedAt": "2026-11-25T14:01:23.678642+00:00",
+  "publishedAt": "2026-11-26T01:18:40.115620+00:00",
   "changedFiles": [
-    "DS-PDF-Design-Progress-DS-Cards-Chips.pdf",
-    "DS-PDF-Design-Progress-DS-Genesis.pdf",
-    "DS-PDF-Design-Progress-DS-guidebook-250603.pdf",
-    "DS-PDF-Design-Progress-DS-WSmockups.pdf",
-    "DS-PDF-Design-Progress-DS-GW280526.pdf",
-    "DS-PDF-Design-Progress-Deepstack-Coliseum-2.pdf",
-    "DS-PDF-Design-Progress-DS-JejuChips-2.pdf",
-    "DS-PDF-Design-Progress-DS-London.pdf",
-    "DS-PDF-Design-Progress-DS-WIP100726.pdf",
-    "DS-spatial-design-London-DS-London.pdf"
+    "DeepStack-Run-the-Table-Logo-and-Smoke-4K-Square.png"
   ]
 }

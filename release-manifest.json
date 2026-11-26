@@ -2,8 +2,8 @@
   "release": "content-188",
   "created": "2026-11-25T14:01:23.727497+00:00",
   "catalog_revision": 188,
-  "entry_count": 88,
-  "included_downloads": 87,
+  "entry_count": 89,
+  "included_downloads": 88,
   "external_font_references": 2,
   "assets": [
     {
@@ -1624,6 +1624,23 @@
       "access": "public",
       "editable_original": false,
       "approval": "Owner requested library inclusion; no new design approval inferred"
+    },
+    {
+      "id": "brand-deepstack-run-the-table-logo-and-smoke-4k",
+      "title": "DeepStack-Run-the-Table-Logo-and-Smoke-4K-Square.png",
+      "type": ".png",
+      "category": "Brand Identity/Logo/DeepStack/3D",
+      "owner": "Matthew / DeepStack library",
+      "version": "8041e7d427afe22e7df2e97e37cc1f41fa5708c3c2a1443ae307590ee0608825",
+      "updated": "2026-11-26T01:18:40.115620+00:00",
+      "preview": "/asset-library/assets/third-tier-sample19/owner02nov/brands/DeepStack-Run-the-Table-Logo-and-Smoke-4K-Square-thumb.png?v=b03b75079544c76d",
+      "download": "/asset-library/assets/third-tier-sample19/owner02nov/brands/DeepStack-Run-the-Table-Logo-and-Smoke-4K-Square.png",
+      "local_file": "assets/third-tier-sample19/owner02nov/brands/DeepStack-Run-the-Table-Logo-and-Smoke-4K-Square.png",
+      "bytes": 5245711,
+      "sha256": "8041e7d427afe22e7df2e97e37cc1f41fa5708c3c2a1443ae307590ee0608825",
+      "access": "public",
+      "approval": "Owner requested library inclusion",
+      "editable_original": false
     }
   ],
   "exclusions": [
